@@ -96,9 +96,6 @@ class ServerManagerDialog(QtGui.QDialog, FORM_CLASS):
             serverInfo = WpsServerInfo(self.server_dir + serverName, serverName, serverURL, version=version, serverType=serverType)
             self.addServerItem(serverInfo)
         
-        #self.addServerItem(u'GeepsServer', u'http://geeps.krihs.re.kr:8080/gxt/wps', u'1.0.0', u'KOPSS')
-        #self.addServerItem(u'GeoServer', u'http://localhost:8080/geoserver/wps', u'1.0.0', u'General')
-        
         tableWidget.resizeColumnsToContents()
         tableWidget.show()
         
@@ -171,10 +168,13 @@ class ServerManagerDialog(QtGui.QDialog, FORM_CLASS):
             for row in range(self.tblServer.rowCount()):
                 if self.tblServer.item(row, 0).checkState() == QtCore.Qt.Checked:
                     serverName = self.tblServer.item(row, 0).text()
-                    # delete configuration file
-                    configFile = self.server_dir + serverName + ".ini"
+                    configFile = os.path.join(self.server_dir, serverName + ".ini")
                     if os.path.isfile(configFile):
-                        #os.remove(configFile)
+                        # delete configuration file
+                        os.remove(configFile)
+                        # delete metadata directory
+                        shutil.rmtree(os.path.join(self.server_dir, serverName), ignore_errors=True)
+                        # remove item
                         self.tblServer.removeRow(row)
     
     def apply(self):
