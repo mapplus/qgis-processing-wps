@@ -1,0 +1,118 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<wps:ProcessDescriptions xml:lang="en" service="WPS" version="1.0.0" xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsAll.xsd" xmlns:wps="http://www.opengis.net/wps/1.0.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <ProcessDescription wps:processVersion="1.0.0" statusSupported="true" storeSupported="true">
+    <ows:Identifier>kopss:KM_LogisticGrowthModel</ows:Identifier>
+    <ows:Title>KM_LogisticGrowthModel</ows:Title>
+    <ows:Abstract>로지스틱모형 인구성장이 초기에는 완만하다가 일정기간이 지나면 급속한 증가율을 나타내고 또 일정기간이 지나면 그 증가율이 점차 감소하여 결국에는 인구가 일정수준을 유지하는 인구성장 경로를 분석하는데 적합한 모델이다.</ows:Abstract>
+    <DataInputs>
+      <Input maxOccurs="1" minOccurs="1">
+        <ows:Identifier>adminCode</ows:Identifier>
+        <ows:Title>adminCode</ows:Title>
+        <ows:Abstract>두자리(시도단위) 또는 다섯자리(시군구단위)로 콤마로 분리하여 하나 이상을 입력</ows:Abstract>
+        <LiteralData>
+          <ows:AnyValue />
+        </LiteralData>
+      </Input>
+      <Input maxOccurs="1" minOccurs="1">
+        <ows:Identifier>startYear</ows:Identifier>
+        <ows:Title>startYear</ows:Title>
+        <ows:Abstract>시작년도, ex)2000</ows:Abstract>
+        <LiteralData>
+          <ows:AnyValue />
+        </LiteralData>
+      </Input>
+      <Input maxOccurs="1" minOccurs="1">
+        <ows:Identifier>endYear</ows:Identifier>
+        <ows:Title>endYear</ows:Title>
+        <ows:Abstract>종료년도, ex)2010</ows:Abstract>
+        <LiteralData>
+          <ows:AnyValue />
+        </LiteralData>
+      </Input>
+      <Input maxOccurs="1" minOccurs="1">
+        <ows:Identifier>popMaxValue</ows:Identifier>
+        <ows:Title>popMaxValue</ows:Title>
+        <ows:Abstract>지역인구의 상한값</ows:Abstract>
+        <LiteralData>
+          <ows:DataType>xs:int</ows:DataType>
+          <ows:AnyValue />
+        </LiteralData>
+      </Input>
+      <Input maxOccurs="1" minOccurs="1">
+        <ows:Identifier>targetYear</ows:Identifier>
+        <ows:Title>targetYear</ows:Title>
+        <ows:Abstract>목표년도, ex)2020</ows:Abstract>
+        <LiteralData>
+          <ows:AnyValue />
+        </LiteralData>
+      </Input>
+    </DataInputs>
+    <ProcessOutputs>
+      <Output>
+        <ows:Identifier>adminBoundary</ows:Identifier>
+        <ows:Title>adminBoundary</ows:Title>
+        <ComplexOutput>
+          <Default>
+            <Format>
+              <MimeType>text/xml; subtype=wfs-collection/1.1</MimeType>
+            </Format>
+          </Default>
+          <Supported>
+            <Format>
+              <MimeType>text/xml; subtype=wfs-collection/1.1</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=wfs-collection/1.0</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/json</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/wfs-collection-1.1</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/wfs-collection-1.0</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=gml/3.2.1</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=gml/3.1.1</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=gml/2.1.2</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=kml/2.1</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=kml/2.2</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/vnd.google-earth.kml+xml</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/zip</MimeType>
+            </Format>
+          </Supported>
+        </ComplexOutput>
+      </Output>
+      <Output>
+        <ows:Identifier>populationPerYear</ows:Identifier>
+        <ows:Title>populationPerYear</ows:Title>
+        <ComplexOutput>
+          <Default>
+            <Format>
+              <MimeType>text/xml</MimeType>
+            </Format>
+          </Default>
+          <Supported>
+            <Format>
+              <MimeType>text/xml</MimeType>
+            </Format>
+          </Supported>
+        </ComplexOutput>
+      </Output>
+    </ProcessOutputs>
+  </ProcessDescription>
+</wps:ProcessDescriptions>

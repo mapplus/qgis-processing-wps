@@ -1,0 +1,224 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<wps:ProcessDescriptions xml:lang="en" service="WPS" version="1.0.0" xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsAll.xsd" xmlns:wps="http://www.opengis.net/wps/1.0.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <ProcessDescription wps:processVersion="1.0.0" statusSupported="true" storeSupported="true">
+    <ows:Identifier>kopss:KM_DemandCommercialArea</ows:Identifier>
+    <ows:Title>KM_DemandCommercialArea</ows:Title>
+    <ows:Abstract>상업용지 소요면적 산정 산업시설 및 단지건설이 요구되는 산업용지의 규모 예측 중 상업용지 소요면적을 산정한다.</ows:Abstract>
+    <DataInputs>
+      <Input maxOccurs="1" minOccurs="0">
+        <ows:Identifier>estimatedPop</ows:Identifier>
+        <ows:Title>estimatedPop</ows:Title>
+        <ows:Abstract>인구변화예측 분석 결과 XML</ows:Abstract>
+        <ComplexData>
+          <Default>
+            <Format>
+              <MimeType>text/xml</MimeType>
+            </Format>
+          </Default>
+          <Supported>
+            <Format>
+              <MimeType>text/xml</MimeType>
+            </Format>
+          </Supported>
+        </ComplexData>
+      </Input>
+      <Input maxOccurs="1" minOccurs="0">
+        <ows:Identifier>targetYear</ows:Identifier>
+        <ows:Title>targetYear</ows:Title>
+        <ows:Abstract>목표연도</ows:Abstract>
+        <LiteralData>
+          <ows:AnyValue />
+        </LiteralData>
+      </Input>
+      <Input maxOccurs="1" minOccurs="0">
+        <ows:Identifier>targetYearPop</ows:Identifier>
+        <ows:Title>targetYearPop</ows:Title>
+        <ows:Abstract>목표연도 인구</ows:Abstract>
+        <LiteralData>
+          <ows:DataType>xs:double</ows:DataType>
+          <ows:AnyValue />
+        </LiteralData>
+      </Input>
+      <Input maxOccurs="1" minOccurs="0">
+        <ows:Identifier>civicCenterD</ows:Identifier>
+        <ows:Title>civicCenterD</ows:Title>
+        <ows:Abstract>도심 분담률(%)(default:50)</ows:Abstract>
+        <LiteralData>
+          <ows:DataType>xs:double</ows:DataType>
+          <ows:AnyValue />
+        </LiteralData>
+      </Input>
+      <Input maxOccurs="1" minOccurs="0">
+        <ows:Identifier>subCenterD</ows:Identifier>
+        <ows:Title>subCenterD</ows:Title>
+        <ows:Abstract>부도심 분담률(%)(default:30)</ows:Abstract>
+        <LiteralData>
+          <ows:DataType>xs:double</ows:DataType>
+          <ows:AnyValue />
+        </LiteralData>
+      </Input>
+      <Input maxOccurs="1" minOccurs="0">
+        <ows:Identifier>zoneCenterD</ows:Identifier>
+        <ows:Title>zoneCenterD</ows:Title>
+        <ows:Abstract>지구중심 분담률(%)(default:20)</ows:Abstract>
+        <LiteralData>
+          <ows:DataType>xs:double</ows:DataType>
+          <ows:AnyValue />
+        </LiteralData>
+      </Input>
+      <Input maxOccurs="1" minOccurs="0">
+        <ows:Identifier>civicCenterO</ows:Identifier>
+        <ows:Title>civicCenterO</ows:Title>
+        <ows:Abstract>도심 1인당점유면적(㎡)(default:15)</ows:Abstract>
+        <LiteralData>
+          <ows:DataType>xs:double</ows:DataType>
+          <ows:AnyValue />
+        </LiteralData>
+      </Input>
+      <Input maxOccurs="1" minOccurs="0">
+        <ows:Identifier>subCenterO</ows:Identifier>
+        <ows:Title>subCenterO</ows:Title>
+        <ows:Abstract>부도심 1인당점유면적(㎡)(default:12)</ows:Abstract>
+        <LiteralData>
+          <ows:DataType>xs:double</ows:DataType>
+          <ows:AnyValue />
+        </LiteralData>
+      </Input>
+      <Input maxOccurs="1" minOccurs="0">
+        <ows:Identifier>zoneCenterO</ows:Identifier>
+        <ows:Title>zoneCenterO</ows:Title>
+        <ows:Abstract>지구중심 1인당점유면적(㎡)(default:10)</ows:Abstract>
+        <LiteralData>
+          <ows:DataType>xs:double</ows:DataType>
+          <ows:AnyValue />
+        </LiteralData>
+      </Input>
+      <Input maxOccurs="1" minOccurs="0">
+        <ows:Identifier>civicCenterF</ows:Identifier>
+        <ows:Title>civicCenterF</ows:Title>
+        <ows:Abstract>도심 평균층수(층)(default:7)</ows:Abstract>
+        <LiteralData>
+          <ows:DataType>xs:double</ows:DataType>
+          <ows:AnyValue />
+        </LiteralData>
+      </Input>
+      <Input maxOccurs="1" minOccurs="0">
+        <ows:Identifier>subCenterF</ows:Identifier>
+        <ows:Title>subCenterF</ows:Title>
+        <ows:Abstract>부도심 평균층수(층)(default:4)</ows:Abstract>
+        <LiteralData>
+          <ows:DataType>xs:double</ows:DataType>
+          <ows:AnyValue />
+        </LiteralData>
+      </Input>
+      <Input maxOccurs="1" minOccurs="0">
+        <ows:Identifier>zoneCenterF</ows:Identifier>
+        <ows:Title>zoneCenterF</ows:Title>
+        <ows:Abstract>지구중심 평균층수(층)(default:3)</ows:Abstract>
+        <LiteralData>
+          <ows:DataType>xs:double</ows:DataType>
+          <ows:AnyValue />
+        </LiteralData>
+      </Input>
+      <Input maxOccurs="1" minOccurs="0">
+        <ows:Identifier>civicCenterB</ows:Identifier>
+        <ows:Title>civicCenterB</ows:Title>
+        <ows:Abstract>도심 건폐율(%)(default:55)</ows:Abstract>
+        <LiteralData>
+          <ows:DataType>xs:double</ows:DataType>
+          <ows:AnyValue />
+        </LiteralData>
+      </Input>
+      <Input maxOccurs="1" minOccurs="0">
+        <ows:Identifier>subCenterB</ows:Identifier>
+        <ows:Title>subCenterB</ows:Title>
+        <ows:Abstract>부도심 건폐율(%)(default:60)</ows:Abstract>
+        <LiteralData>
+          <ows:DataType>xs:double</ows:DataType>
+          <ows:AnyValue />
+        </LiteralData>
+      </Input>
+      <Input maxOccurs="1" minOccurs="0">
+        <ows:Identifier>zoneCenterB</ows:Identifier>
+        <ows:Title>zoneCenterB</ows:Title>
+        <ows:Abstract>지구중심 건폐율(%)(default:65)</ows:Abstract>
+        <LiteralData>
+          <ows:DataType>xs:double</ows:DataType>
+          <ows:AnyValue />
+        </LiteralData>
+      </Input>
+      <Input maxOccurs="1" minOccurs="0">
+        <ows:Identifier>civicCenterP</ows:Identifier>
+        <ows:Title>civicCenterP</ows:Title>
+        <ows:Abstract>도심 공공용지율(%)(default:50)</ows:Abstract>
+        <LiteralData>
+          <ows:DataType>xs:double</ows:DataType>
+          <ows:AnyValue />
+        </LiteralData>
+      </Input>
+      <Input maxOccurs="1" minOccurs="0">
+        <ows:Identifier>subCenterP</ows:Identifier>
+        <ows:Title>subCenterP</ows:Title>
+        <ows:Abstract>부도심 공공용지율(%)(default:40)</ows:Abstract>
+        <LiteralData>
+          <ows:DataType>xs:double</ows:DataType>
+          <ows:AnyValue />
+        </LiteralData>
+      </Input>
+      <Input maxOccurs="1" minOccurs="0">
+        <ows:Identifier>zoneCenterP</ows:Identifier>
+        <ows:Title>zoneCenterP</ows:Title>
+        <ows:Abstract>지구중심 공공용지율(%)(default:3)</ows:Abstract>
+        <LiteralData>
+          <ows:DataType>xs:double</ows:DataType>
+          <ows:AnyValue />
+        </LiteralData>
+      </Input>
+      <Input maxOccurs="1" minOccurs="0">
+        <ows:Identifier>civicCenterM</ows:Identifier>
+        <ows:Title>civicCenterM</ows:Title>
+        <ows:Abstract>도심 혼합률(%)(default:15)</ows:Abstract>
+        <LiteralData>
+          <ows:DataType>xs:double</ows:DataType>
+          <ows:AnyValue />
+        </LiteralData>
+      </Input>
+      <Input maxOccurs="1" minOccurs="0">
+        <ows:Identifier>subCenterM</ows:Identifier>
+        <ows:Title>subCenterM</ows:Title>
+        <ows:Abstract>부도심 혼합률(%)(default:10)</ows:Abstract>
+        <LiteralData>
+          <ows:DataType>xs:double</ows:DataType>
+          <ows:AnyValue />
+        </LiteralData>
+      </Input>
+      <Input maxOccurs="1" minOccurs="0">
+        <ows:Identifier>zoneCenterM</ows:Identifier>
+        <ows:Title>zoneCenterM</ows:Title>
+        <ows:Abstract>지구중심 혼합률(%)(default:10)</ows:Abstract>
+        <LiteralData>
+          <ows:DataType>xs:double</ows:DataType>
+          <ows:AnyValue />
+        </LiteralData>
+      </Input>
+    </DataInputs>
+    <ProcessOutputs>
+      <Output>
+        <ows:Identifier>result</ows:Identifier>
+        <ows:Title>Result</ows:Title>
+        <ComplexOutput>
+          <Default>
+            <Format>
+              <MimeType>text/xml</MimeType>
+            </Format>
+          </Default>
+          <Supported>
+            <Format>
+              <MimeType>text/xml</MimeType>
+            </Format>
+          </Supported>
+        </ComplexOutput>
+      </Output>
+    </ProcessOutputs>
+  </ProcessDescription>
+</wps:ProcessDescriptions>

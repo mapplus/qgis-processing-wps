@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<wps:ProcessDescriptions xml:lang="en" service="WPS" version="1.0.0" xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsAll.xsd" xmlns:wps="http://www.opengis.net/wps/1.0.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <ProcessDescription wps:processVersion="1.0.0" statusSupported="true" storeSupported="true">
+    <ows:Identifier>kopss:SA_Regression</ows:Identifier>
+    <ows:Title>SA_Regression</ows:Title>
+    <ows:Abstract>In statistics, regression analysis includes many techniques for modeling and analyzing several variables, when the focus is on the relationship between a dependent variable and one or more independent variables.</ows:Abstract>
+    <DataInputs>
+      <Input maxOccurs="1" minOccurs="1">
+        <ows:Identifier>inputFeatures</ows:Identifier>
+        <ows:Title>1. Input features</ows:Title>
+        <ows:Abstract>inputFeatures</ows:Abstract>
+        <ComplexData>
+          <Default>
+            <Format>
+              <MimeType>text/xml; subtype=wfs-collection/1.1</MimeType>
+            </Format>
+          </Default>
+          <Supported>
+            <Format>
+              <MimeType>text/xml; subtype=wfs-collection/1.1</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=wfs-collection/1.0</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/json</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/wfs-collection-1.1</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/wfs-collection-1.0</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=gml/3.2.1</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=gml/3.1.1</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=gml/2.1.2</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=kml/2.1</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=kml/2.2</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/vnd.google-earth.kml+xml</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/zip</MimeType>
+            </Format>
+          </Supported>
+        </ComplexData>
+      </Input>
+      <Input maxOccurs="1" minOccurs="1">
+        <ows:Identifier>dependentVariable</ows:Identifier>
+        <ows:Title>2. Dependent variable field</ows:Title>
+        <ows:Abstract>dependent variable, single field</ows:Abstract>
+        <LiteralData>
+          <ows:AnyValue />
+        </LiteralData>
+      </Input>
+      <Input maxOccurs="1" minOccurs="1">
+        <ows:Identifier>independentVariables</ows:Identifier>
+        <ows:Title>3. Comma(,) seperated independent variables</ows:Title>
+        <ows:Abstract>independent variables. One or more fields separated by commas</ows:Abstract>
+        <LiteralData>
+          <ows:AnyValue />
+        </LiteralData>
+      </Input>
+    </DataInputs>
+    <ProcessOutputs>
+      <Output>
+        <ows:Identifier>result</ows:Identifier>
+        <ows:Title>Result</ows:Title>
+        <ComplexOutput>
+          <Default>
+            <Format>
+              <MimeType>text/xml</MimeType>
+            </Format>
+          </Default>
+          <Supported>
+            <Format>
+              <MimeType>text/xml</MimeType>
+            </Format>
+          </Supported>
+        </ComplexOutput>
+      </Output>
+    </ProcessOutputs>
+  </ProcessDescription>
+</wps:ProcessDescriptions>

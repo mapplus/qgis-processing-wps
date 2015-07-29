@@ -1,0 +1,136 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<wps:ProcessDescriptions xml:lang="en" service="WPS" version="1.0.0" xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsAll.xsd" xmlns:wps="http://www.opengis.net/wps/1.0.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <ProcessDescription wps:processVersion="1.0.0" statusSupported="true" storeSupported="true">
+    <ows:Identifier>kopss:KM_InfrastructureAnalizeLass</ows:Identifier>
+    <ows:Title>KM_InfrastructureAnalizeLass</ows:Title>
+    <ows:Abstract>입지배분 후보지 탐색: 시설의 공급적정성 평가에 의해 해당시설이 부족하다고 판단된 지역을 대상으로 신규 시설의 최적의 입지를 입지배분방법에 따라 탐색한다.</ows:Abstract>
+    <DataInputs>
+      <Input maxOccurs="1" minOccurs="1">
+        <ows:Identifier>inputArea</ows:Identifier>
+        <ows:Title>inputArea</ows:Title>
+        <ows:Abstract>분석영역 polygon geometry</ows:Abstract>
+        <ComplexData>
+          <Default>
+            <Format>
+              <MimeType>text/xml; subtype=gml/3.1.1</MimeType>
+            </Format>
+          </Default>
+          <Supported>
+            <Format>
+              <MimeType>text/xml; subtype=gml/3.1.1</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=gml/2.1.2</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/wkt</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/gml-3.1.1</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/gml-2.1.2</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/wkb</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/json</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=kml/2.1</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=kml/2.2</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=georss</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=atom</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=svg</MimeType>
+            </Format>
+          </Supported>
+        </ComplexData>
+      </Input>
+      <Input maxOccurs="1" minOccurs="1">
+        <ows:Identifier>popCondition</ows:Identifier>
+        <ows:Title>popCondition</ows:Title>
+        <ows:Abstract>인구배분을 위한 연령조건, pfla_residentpop_pos 테이블의 birth_year 필드를 사용한다.</ows:Abstract>
+        <LiteralData>
+          <ows:AnyValue />
+        </LiteralData>
+      </Input>
+      <Input maxOccurs="1" minOccurs="0">
+        <ows:Identifier>lassModelType</ows:Identifier>
+        <ows:Title>lassModelType</ows:Title>
+        <ows:Abstract>PMedian(총통행거리 최소화, 기본값), MaxiMin(최대통행거리 최소화), MiniMax(최소통행거리 최대화)</ows:Abstract>
+        <LiteralData>
+          <ows:AnyValue />
+        </LiteralData>
+      </Input>
+      <Input maxOccurs="1" minOccurs="0">
+        <ows:Identifier>numberOfCandidates</ows:Identifier>
+        <ows:Title>numberOfCandidates</ows:Title>
+        <ows:Abstract>분석 후보지 갯수, 기본값은 3</ows:Abstract>
+        <LiteralData>
+          <ows:DataType>xs:int</ows:DataType>
+          <ows:AnyValue />
+        </LiteralData>
+      </Input>
+    </DataInputs>
+    <ProcessOutputs>
+      <Output>
+        <ows:Identifier>result</ows:Identifier>
+        <ows:Title>Result</ows:Title>
+        <ComplexOutput>
+          <Default>
+            <Format>
+              <MimeType>text/xml; subtype=wfs-collection/1.1</MimeType>
+            </Format>
+          </Default>
+          <Supported>
+            <Format>
+              <MimeType>text/xml; subtype=wfs-collection/1.1</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=wfs-collection/1.0</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/json</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/wfs-collection-1.1</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/wfs-collection-1.0</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=gml/3.2.1</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=gml/3.1.1</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=gml/2.1.2</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=kml/2.1</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=kml/2.2</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/vnd.google-earth.kml+xml</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/zip</MimeType>
+            </Format>
+          </Supported>
+        </ComplexOutput>
+      </Output>
+    </ProcessOutputs>
+  </ProcessDescription>
+</wps:ProcessDescriptions>

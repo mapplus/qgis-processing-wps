@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<wps:ProcessDescriptions xml:lang="en" service="WPS" version="1.0.0" xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsAll.xsd" xmlns:wps="http://www.opengis.net/wps/1.0.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <ProcessDescription wps:processVersion="1.0.0" statusSupported="true" storeSupported="true">
+    <ows:Identifier>kopss:CA_CutFill</ows:Identifier>
+    <ows:Title>CA_CutFill</ows:Title>
+    <ows:Abstract>Calculates the volume change between two surfaces. This is typically used for cut and fill operations.</ows:Abstract>
+    <DataInputs>
+      <Input maxOccurs="1" minOccurs="1">
+        <ows:Identifier>beforeCoverage</ows:Identifier>
+        <ows:Title>The input surface before the cut or fill operation</ows:Title>
+        <ows:Abstract>The input representing the surface before the cut or fill operation.</ows:Abstract>
+        <ComplexData>
+          <Default>
+            <Format>
+              <MimeType>application/arcgrid</MimeType>
+            </Format>
+          </Default>
+          <Supported>
+            <Format>
+              <MimeType>application/arcgrid</MimeType>
+            </Format>
+            <Format>
+              <MimeType>image/geotiff</MimeType>
+            </Format>
+            <Format>
+              <MimeType>image/tiff</MimeType>
+            </Format>
+          </Supported>
+        </ComplexData>
+      </Input>
+      <Input maxOccurs="1" minOccurs="1">
+        <ows:Identifier>afterCoverage</ows:Identifier>
+        <ows:Title>The input surface after the cut or fill operation</ows:Title>
+        <ows:Abstract>The input representing the surface after the cut or fill operation.</ows:Abstract>
+        <ComplexData>
+          <Default>
+            <Format>
+              <MimeType>application/arcgrid</MimeType>
+            </Format>
+          </Default>
+          <Supported>
+            <Format>
+              <MimeType>application/arcgrid</MimeType>
+            </Format>
+            <Format>
+              <MimeType>image/geotiff</MimeType>
+            </Format>
+            <Format>
+              <MimeType>image/tiff</MimeType>
+            </Format>
+          </Supported>
+        </ComplexData>
+      </Input>
+    </DataInputs>
+    <ProcessOutputs>
+      <Output>
+        <ows:Identifier>resultCoverage</ows:Identifier>
+        <ows:Title>resultCoverage</ows:Title>
+        <ComplexOutput>
+          <Default>
+            <Format>
+              <MimeType>application/arcgrid</MimeType>
+            </Format>
+          </Default>
+          <Supported>
+            <Format>
+              <MimeType>application/arcgrid</MimeType>
+            </Format>
+            <Format>
+              <MimeType>image/geotiff</MimeType>
+            </Format>
+            <Format>
+              <MimeType>image/tiff</MimeType>
+            </Format>
+          </Supported>
+        </ComplexOutput>
+      </Output>
+      <Output>
+        <ows:Identifier>resultXML</ows:Identifier>
+        <ows:Title>resultXML</ows:Title>
+        <ComplexOutput>
+          <Default>
+            <Format>
+              <MimeType>text/xml</MimeType>
+            </Format>
+          </Default>
+          <Supported>
+            <Format>
+              <MimeType>text/xml</MimeType>
+            </Format>
+          </Supported>
+        </ComplexOutput>
+      </Output>
+    </ProcessOutputs>
+  </ProcessDescription>
+</wps:ProcessDescriptions>

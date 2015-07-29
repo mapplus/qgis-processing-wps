@@ -1,0 +1,134 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<wps:ProcessDescriptions xml:lang="en" service="WPS" version="1.0.0" xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsAll.xsd" xmlns:wps="http://www.opengis.net/wps/1.0.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <ProcessDescription wps:processVersion="1.0.0" statusSupported="true" storeSupported="true">
+    <ows:Identifier>kopss:CA_Merge</ows:Identifier>
+    <ows:Title>CA_Merge</ows:Title>
+    <ows:Abstract>Mosaics multiple raster datasets into a new raster dataset.</ows:Abstract>
+    <DataInputs>
+      <Input maxOccurs="1" minOccurs="1">
+        <ows:Identifier>coverage1</ows:Identifier>
+        <ows:Title>coverage1</ows:Title>
+        <ows:Abstract>coverage1</ows:Abstract>
+        <ComplexData>
+          <Default>
+            <Format>
+              <MimeType>application/arcgrid</MimeType>
+            </Format>
+          </Default>
+          <Supported>
+            <Format>
+              <MimeType>application/arcgrid</MimeType>
+            </Format>
+            <Format>
+              <MimeType>image/geotiff</MimeType>
+            </Format>
+            <Format>
+              <MimeType>image/tiff</MimeType>
+            </Format>
+          </Supported>
+        </ComplexData>
+      </Input>
+      <Input maxOccurs="1" minOccurs="1">
+        <ows:Identifier>coverage2</ows:Identifier>
+        <ows:Title>coverage2</ows:Title>
+        <ows:Abstract>coverage2</ows:Abstract>
+        <ComplexData>
+          <Default>
+            <Format>
+              <MimeType>application/arcgrid</MimeType>
+            </Format>
+          </Default>
+          <Supported>
+            <Format>
+              <MimeType>application/arcgrid</MimeType>
+            </Format>
+            <Format>
+              <MimeType>image/geotiff</MimeType>
+            </Format>
+            <Format>
+              <MimeType>image/tiff</MimeType>
+            </Format>
+          </Supported>
+        </ComplexData>
+      </Input>
+      <Input maxOccurs="1" minOccurs="0">
+        <ows:Identifier>coverage3</ows:Identifier>
+        <ows:Title>coverage3</ows:Title>
+        <ows:Abstract>coverage3</ows:Abstract>
+        <ComplexData>
+          <Default>
+            <Format>
+              <MimeType>application/arcgrid</MimeType>
+            </Format>
+          </Default>
+          <Supported>
+            <Format>
+              <MimeType>application/arcgrid</MimeType>
+            </Format>
+            <Format>
+              <MimeType>image/geotiff</MimeType>
+            </Format>
+            <Format>
+              <MimeType>image/tiff</MimeType>
+            </Format>
+          </Supported>
+        </ComplexData>
+      </Input>
+      <Input maxOccurs="1" minOccurs="0">
+        <ows:Identifier>coverage4</ows:Identifier>
+        <ows:Title>coverage4</ows:Title>
+        <ows:Abstract>coverage4</ows:Abstract>
+        <ComplexData>
+          <Default>
+            <Format>
+              <MimeType>application/arcgrid</MimeType>
+            </Format>
+          </Default>
+          <Supported>
+            <Format>
+              <MimeType>application/arcgrid</MimeType>
+            </Format>
+            <Format>
+              <MimeType>image/geotiff</MimeType>
+            </Format>
+            <Format>
+              <MimeType>image/tiff</MimeType>
+            </Format>
+          </Supported>
+        </ComplexData>
+      </Input>
+      <Input maxOccurs="1" minOccurs="0">
+        <ows:Identifier>mergeType</ows:Identifier>
+        <ows:Title>The method used to merge overlapping areas</ows:Title>
+        <ows:Abstract>First(Default), Last, Mean, Minimum, Maximum</ows:Abstract>
+        <LiteralData>
+          <ows:AnyValue />
+        </LiteralData>
+      </Input>
+    </DataInputs>
+    <ProcessOutputs>
+      <Output>
+        <ows:Identifier>result</ows:Identifier>
+        <ows:Title>Result</ows:Title>
+        <ComplexOutput>
+          <Default>
+            <Format>
+              <MimeType>application/arcgrid</MimeType>
+            </Format>
+          </Default>
+          <Supported>
+            <Format>
+              <MimeType>application/arcgrid</MimeType>
+            </Format>
+            <Format>
+              <MimeType>image/geotiff</MimeType>
+            </Format>
+            <Format>
+              <MimeType>image/tiff</MimeType>
+            </Format>
+          </Supported>
+        </ComplexOutput>
+      </Output>
+    </ProcessOutputs>
+  </ProcessDescription>
+</wps:ProcessDescriptions>

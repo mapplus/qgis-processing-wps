@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<wps:ProcessDescriptions xml:lang="en" service="WPS" version="1.0.0" xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsAll.xsd" xmlns:wps="http://www.opengis.net/wps/1.0.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <ProcessDescription wps:processVersion="1.0.0" statusSupported="true" storeSupported="true">
+    <ows:Identifier>kopss:CA_Rescale</ows:Identifier>
+    <ows:Title>CA_Rescale</ows:Title>
+    <ows:Abstract>Resizes a raster by the specified x and y scale factors.</ows:Abstract>
+    <DataInputs>
+      <Input maxOccurs="1" minOccurs="1">
+        <ows:Identifier>inputCoverage</ows:Identifier>
+        <ows:Title>InputCoverage to be transformed</ows:Title>
+        <ows:Abstract>InputCoverage to be transformed</ows:Abstract>
+        <ComplexData>
+          <Default>
+            <Format>
+              <MimeType>application/arcgrid</MimeType>
+            </Format>
+          </Default>
+          <Supported>
+            <Format>
+              <MimeType>application/arcgrid</MimeType>
+            </Format>
+            <Format>
+              <MimeType>image/geotiff</MimeType>
+            </Format>
+            <Format>
+              <MimeType>image/tiff</MimeType>
+            </Format>
+          </Supported>
+        </ComplexData>
+      </Input>
+      <Input maxOccurs="1" minOccurs="1">
+        <ows:Identifier>x_scale</ows:Identifier>
+        <ows:Title>The factor in which to scale the cell size in the x direction</ows:Title>
+        <ows:Abstract>The factor in which to scale the cell size in the x direction. The factor must be greater than zero.</ows:Abstract>
+        <LiteralData>
+          <ows:DataType>xs:double</ows:DataType>
+          <ows:AnyValue />
+        </LiteralData>
+      </Input>
+      <Input maxOccurs="1" minOccurs="1">
+        <ows:Identifier>y_scale</ows:Identifier>
+        <ows:Title>The factor in which to scale the cell size in the y direction</ows:Title>
+        <ows:Abstract>The factor in which to scale the cell size in the y direction. The factor must be greater than zero.</ows:Abstract>
+        <LiteralData>
+          <ows:DataType>xs:double</ows:DataType>
+          <ows:AnyValue />
+        </LiteralData>
+      </Input>
+    </DataInputs>
+    <ProcessOutputs>
+      <Output>
+        <ows:Identifier>result</ows:Identifier>
+        <ows:Title>Result</ows:Title>
+        <ComplexOutput>
+          <Default>
+            <Format>
+              <MimeType>application/arcgrid</MimeType>
+            </Format>
+          </Default>
+          <Supported>
+            <Format>
+              <MimeType>application/arcgrid</MimeType>
+            </Format>
+            <Format>
+              <MimeType>image/geotiff</MimeType>
+            </Format>
+            <Format>
+              <MimeType>image/tiff</MimeType>
+            </Format>
+          </Supported>
+        </ComplexOutput>
+      </Output>
+    </ProcessOutputs>
+  </ProcessDescription>
+</wps:ProcessDescriptions>

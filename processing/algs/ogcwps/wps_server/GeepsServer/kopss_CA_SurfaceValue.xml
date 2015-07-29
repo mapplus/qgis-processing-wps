@@ -1,0 +1,107 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<wps:ProcessDescriptions xml:lang="en" service="WPS" version="1.0.0" xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsAll.xsd" xmlns:wps="http://www.opengis.net/wps/1.0.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <ProcessDescription wps:processVersion="1.0.0" statusSupported="true" storeSupported="true">
+    <ows:Identifier>kopss:CA_SurfaceValue</ows:Identifier>
+    <ows:Title>CA_SurfaceValue</ows:Title>
+    <ows:Abstract>Returns a polyline featurecollection with z values interpolated from the input coverage</ows:Abstract>
+    <DataInputs>
+      <Input maxOccurs="1" minOccurs="1">
+        <ows:Identifier>inputCoverage</ows:Identifier>
+        <ows:Title>Input surface raster</ows:Title>
+        <ows:Abstract>The input surface raster</ows:Abstract>
+        <ComplexData>
+          <Default>
+            <Format>
+              <MimeType>application/arcgrid</MimeType>
+            </Format>
+          </Default>
+          <Supported>
+            <Format>
+              <MimeType>application/arcgrid</MimeType>
+            </Format>
+            <Format>
+              <MimeType>image/geotiff</MimeType>
+            </Format>
+            <Format>
+              <MimeType>image/tiff</MimeType>
+            </Format>
+          </Supported>
+        </ComplexData>
+      </Input>
+      <Input maxOccurs="1" minOccurs="1">
+        <ows:Identifier>inputPoint</ows:Identifier>
+        <ows:Title>Input point</ows:Title>
+        <ows:Abstract>inputPoint</ows:Abstract>
+        <ComplexData>
+          <Default>
+            <Format>
+              <MimeType>text/xml; subtype=gml/3.1.1</MimeType>
+            </Format>
+          </Default>
+          <Supported>
+            <Format>
+              <MimeType>text/xml; subtype=gml/3.1.1</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=gml/2.1.2</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/wkt</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/gml-3.1.1</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/gml-2.1.2</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/wkb</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/json</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=kml/2.1</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=kml/2.2</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=georss</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=atom</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=svg</MimeType>
+            </Format>
+          </Supported>
+        </ComplexData>
+      </Input>
+      <Input maxOccurs="1" minOccurs="0">
+        <ows:Identifier>surfaceFunction</ows:Identifier>
+        <ows:Title>Surface function</ows:Title>
+        <ows:Abstract>surfaceFunction: Elevation(default), SlopeDegrees(or Slope), SlopePercent, SlopeRadians, AspectDegrees(or Aspect), AspectRadians</ows:Abstract>
+        <LiteralData>
+          <ows:AllowedValues>
+            <ows:Value>Elevation</ows:Value>
+            <ows:Value>SlopeDegrees</ows:Value>
+            <ows:Value>SlopePercent</ows:Value>
+            <ows:Value>SlopeRadians</ows:Value>
+            <ows:Value>AspectDegrees</ows:Value>
+            <ows:Value>AspectRadians</ows:Value>
+          </ows:AllowedValues>
+        </LiteralData>
+      </Input>
+    </DataInputs>
+    <ProcessOutputs>
+      <Output>
+        <ows:Identifier>result</ows:Identifier>
+        <ows:Title>Result</ows:Title>
+        <LiteralOutput>
+          <ows:DataType>double</ows:DataType>
+        </LiteralOutput>
+      </Output>
+    </ProcessOutputs>
+  </ProcessDescription>
+</wps:ProcessDescriptions>

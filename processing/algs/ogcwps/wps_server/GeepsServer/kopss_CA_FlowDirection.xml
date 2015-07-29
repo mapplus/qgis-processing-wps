@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<wps:ProcessDescriptions xml:lang="en" service="WPS" version="1.0.0" xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsAll.xsd" xmlns:wps="http://www.opengis.net/wps/1.0.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <ProcessDescription wps:processVersion="1.0.0" statusSupported="true" storeSupported="true">
+    <ows:Identifier>kopss:CA_FlowDirection</ows:Identifier>
+    <ows:Title>CA_FlowDirection</ows:Title>
+    <ows:Abstract>Creates a raster of flow direction from each cell to its steepest downslope neighbor.</ows:Abstract>
+    <DataInputs>
+      <Input maxOccurs="1" minOccurs="1">
+        <ows:Identifier>inputSurface</ows:Identifier>
+        <ows:Title>Input surface raster</ows:Title>
+        <ows:Abstract>The input raster representing a continuous surface.</ows:Abstract>
+        <ComplexData>
+          <Default>
+            <Format>
+              <MimeType>application/arcgrid</MimeType>
+            </Format>
+          </Default>
+          <Supported>
+            <Format>
+              <MimeType>application/arcgrid</MimeType>
+            </Format>
+            <Format>
+              <MimeType>image/geotiff</MimeType>
+            </Format>
+            <Format>
+              <MimeType>image/tiff</MimeType>
+            </Format>
+          </Supported>
+        </ComplexData>
+      </Input>
+      <Input maxOccurs="1" minOccurs="0">
+        <ows:Identifier>forceFlow</ows:Identifier>
+        <ows:Title>forceFlow, NORMAL(default), FORCE</ows:Title>
+        <ows:Abstract>Specifies if edge cells will always flow outward or follow normal flow rules</ows:Abstract>
+        <LiteralData>
+          <ows:AllowedValues>
+            <ows:Value>NORMAL</ows:Value>
+            <ows:Value>FORCE</ows:Value>
+          </ows:AllowedValues>
+        </LiteralData>
+      </Input>
+    </DataInputs>
+    <ProcessOutputs>
+      <Output>
+        <ows:Identifier>result</ows:Identifier>
+        <ows:Title>Result</ows:Title>
+        <ComplexOutput>
+          <Default>
+            <Format>
+              <MimeType>application/arcgrid</MimeType>
+            </Format>
+          </Default>
+          <Supported>
+            <Format>
+              <MimeType>application/arcgrid</MimeType>
+            </Format>
+            <Format>
+              <MimeType>image/geotiff</MimeType>
+            </Format>
+            <Format>
+              <MimeType>image/tiff</MimeType>
+            </Format>
+          </Supported>
+        </ComplexOutput>
+      </Output>
+    </ProcessOutputs>
+  </ProcessDescription>
+</wps:ProcessDescriptions>

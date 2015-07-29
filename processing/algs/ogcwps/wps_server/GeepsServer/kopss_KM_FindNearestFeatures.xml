@@ -1,0 +1,276 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<wps:ProcessDescriptions xml:lang="en" service="WPS" version="1.0.0" xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsAll.xsd" xmlns:wps="http://www.opengis.net/wps/1.0.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <ProcessDescription wps:processVersion="1.0.0" statusSupported="true" storeSupported="true">
+    <ows:Identifier>kopss:KM_FindNearestFeatures</ows:Identifier>
+    <ows:Title>KM_FindNearestFeatures</ows:Title>
+    <ows:Abstract>분석결과 후보지 또는 사용자 입력지점에서 검색대상 레이어와의 가장 가까운 피쳐 및 최단경로(직선거리 또는 네트워크 거리)를 분석.</ows:Abstract>
+    <DataInputs>
+      <Input maxOccurs="1" minOccurs="0">
+        <ows:Identifier>inputFeatures</ows:Identifier>
+        <ows:Title>inputFeatures</ows:Title>
+        <ows:Abstract>inputFeatures</ows:Abstract>
+        <ComplexData>
+          <Default>
+            <Format>
+              <MimeType>text/xml; subtype=wfs-collection/1.1</MimeType>
+            </Format>
+          </Default>
+          <Supported>
+            <Format>
+              <MimeType>text/xml; subtype=wfs-collection/1.1</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=wfs-collection/1.0</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/json</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/wfs-collection-1.1</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/wfs-collection-1.0</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=gml/3.2.1</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=gml/3.1.1</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=gml/2.1.2</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=kml/2.1</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=kml/2.2</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/vnd.google-earth.kml+xml</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/zip</MimeType>
+            </Format>
+          </Supported>
+        </ComplexData>
+      </Input>
+      <Input maxOccurs="1" minOccurs="0">
+        <ows:Identifier>inputGeometry</ows:Identifier>
+        <ows:Title>inputGeometry</ows:Title>
+        <ows:Abstract>Input Geometry</ows:Abstract>
+        <ComplexData>
+          <Default>
+            <Format>
+              <MimeType>text/xml; subtype=gml/3.1.1</MimeType>
+            </Format>
+          </Default>
+          <Supported>
+            <Format>
+              <MimeType>text/xml; subtype=gml/3.1.1</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=gml/2.1.2</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/wkt</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/gml-3.1.1</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/gml-2.1.2</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/wkb</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/json</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=kml/2.1</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=kml/2.2</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=georss</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=atom</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=svg</MimeType>
+            </Format>
+          </Supported>
+        </ComplexData>
+      </Input>
+      <Input maxOccurs="1" minOccurs="1">
+        <ows:Identifier>searchFeatures</ows:Identifier>
+        <ows:Title>searchFeatures</ows:Title>
+        <ows:Abstract>검색대상 레이어</ows:Abstract>
+        <ComplexData>
+          <Default>
+            <Format>
+              <MimeType>text/xml; subtype=wfs-collection/1.1</MimeType>
+            </Format>
+          </Default>
+          <Supported>
+            <Format>
+              <MimeType>text/xml; subtype=wfs-collection/1.1</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=wfs-collection/1.0</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/json</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/wfs-collection-1.1</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/wfs-collection-1.0</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=gml/3.2.1</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=gml/3.1.1</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=gml/2.1.2</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=kml/2.1</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=kml/2.2</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/vnd.google-earth.kml+xml</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/zip</MimeType>
+            </Format>
+          </Supported>
+        </ComplexData>
+      </Input>
+      <Input maxOccurs="1" minOccurs="1">
+        <ows:Identifier>searchField</ows:Identifier>
+        <ows:Title>searchField</ows:Title>
+        <ows:Abstract>검색대상 레이어의 대상 필드 이름</ows:Abstract>
+        <LiteralData>
+          <ows:AnyValue />
+        </LiteralData>
+      </Input>
+      <Input maxOccurs="1" minOccurs="0">
+        <ows:Identifier>searchMethod</ows:Identifier>
+        <ows:Title>searchMethod</ows:Title>
+        <ows:Abstract>탐색 방법: Straight(default), Network</ows:Abstract>
+        <LiteralData>
+          <ows:AnyValue />
+        </LiteralData>
+      </Input>
+    </DataInputs>
+    <ProcessOutputs>
+      <Output>
+        <ows:Identifier>findFeatures</ows:Identifier>
+        <ows:Title>findFeatures</ows:Title>
+        <ComplexOutput>
+          <Default>
+            <Format>
+              <MimeType>text/xml; subtype=wfs-collection/1.1</MimeType>
+            </Format>
+          </Default>
+          <Supported>
+            <Format>
+              <MimeType>text/xml; subtype=wfs-collection/1.1</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=wfs-collection/1.0</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/json</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/wfs-collection-1.1</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/wfs-collection-1.0</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=gml/3.2.1</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=gml/3.1.1</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=gml/2.1.2</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=kml/2.1</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=kml/2.2</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/vnd.google-earth.kml+xml</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/zip</MimeType>
+            </Format>
+          </Supported>
+        </ComplexOutput>
+      </Output>
+      <Output>
+        <ows:Identifier>lineFeatures</ows:Identifier>
+        <ows:Title>lineFeatures</ows:Title>
+        <ComplexOutput>
+          <Default>
+            <Format>
+              <MimeType>text/xml; subtype=wfs-collection/1.1</MimeType>
+            </Format>
+          </Default>
+          <Supported>
+            <Format>
+              <MimeType>text/xml; subtype=wfs-collection/1.1</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=wfs-collection/1.0</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/json</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/wfs-collection-1.1</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/wfs-collection-1.0</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=gml/3.2.1</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=gml/3.1.1</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=gml/2.1.2</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=kml/2.1</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=kml/2.2</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/vnd.google-earth.kml+xml</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/zip</MimeType>
+            </Format>
+          </Supported>
+        </ComplexOutput>
+      </Output>
+    </ProcessOutputs>
+  </ProcessDescription>
+</wps:ProcessDescriptions>

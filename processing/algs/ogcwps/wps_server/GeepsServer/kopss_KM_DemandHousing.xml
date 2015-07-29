@@ -1,0 +1,134 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<wps:ProcessDescriptions xml:lang="en" service="WPS" version="1.0.0" xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsAll.xsd" xmlns:wps="http://www.opengis.net/wps/1.0.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <ProcessDescription wps:processVersion="1.0.0" statusSupported="true" storeSupported="true">
+    <ows:Identifier>kopss:KM_DemandHousing</ows:Identifier>
+    <ows:Title>KM_DemandHousing</ows:Title>
+    <ows:Abstract>주택호수 소요면적 산정 신규 주택건설이 요구되는 주거용지의 규모 예측 중 주택호수에 의한 소요면적을 산정한다.</ows:Abstract>
+    <DataInputs>
+      <Input maxOccurs="1" minOccurs="0">
+        <ows:Identifier>estimatedPop</ows:Identifier>
+        <ows:Title>estimatedPop</ows:Title>
+        <ows:Abstract>인구변화예측 분석 결과 XML</ows:Abstract>
+        <ComplexData>
+          <Default>
+            <Format>
+              <MimeType>text/xml</MimeType>
+            </Format>
+          </Default>
+          <Supported>
+            <Format>
+              <MimeType>text/xml</MimeType>
+            </Format>
+          </Supported>
+        </ComplexData>
+      </Input>
+      <Input maxOccurs="1" minOccurs="0">
+        <ows:Identifier>targetYear</ows:Identifier>
+        <ows:Title>targetYear</ows:Title>
+        <ows:Abstract>목표연도</ows:Abstract>
+        <LiteralData>
+          <ows:AnyValue />
+        </LiteralData>
+      </Input>
+      <Input maxOccurs="1" minOccurs="0">
+        <ows:Identifier>targetYearPop</ows:Identifier>
+        <ows:Title>targetYearPop</ows:Title>
+        <ows:Abstract>목표연도 인구</ows:Abstract>
+        <LiteralData>
+          <ows:DataType>xs:double</ows:DataType>
+          <ows:AnyValue />
+        </LiteralData>
+      </Input>
+      <Input maxOccurs="1" minOccurs="0">
+        <ows:Identifier>familyCountValue</ows:Identifier>
+        <ows:Title>familyCountValue</ows:Title>
+        <ows:Abstract>가구당 가구원수(인)(default:2.7)</ows:Abstract>
+        <LiteralData>
+          <ows:DataType>xs:double</ows:DataType>
+          <ows:AnyValue />
+        </LiteralData>
+      </Input>
+      <Input maxOccurs="1" minOccurs="0">
+        <ows:Identifier>familyRateValue</ows:Identifier>
+        <ows:Title>familyRateValue</ows:Title>
+        <ows:Abstract>혈연가구비율(%)(default:91)</ows:Abstract>
+        <LiteralData>
+          <ows:DataType>xs:double</ows:DataType>
+          <ows:AnyValue />
+        </LiteralData>
+      </Input>
+      <Input maxOccurs="1" minOccurs="0">
+        <ows:Identifier>houseRateValue</ows:Identifier>
+        <ows:Title>houseRateValue</ows:Title>
+        <ows:Abstract>주거지역내주택율(%)(default:90)</ows:Abstract>
+        <LiteralData>
+          <ows:DataType>xs:double</ows:DataType>
+          <ows:AnyValue />
+        </LiteralData>
+      </Input>
+      <Input maxOccurs="1" minOccurs="0">
+        <ows:Identifier>floorAreaValue</ows:Identifier>
+        <ows:Title>floorAreaValue</ows:Title>
+        <ows:Abstract>주택1호당연면적(㎡)(default:90)</ows:Abstract>
+        <LiteralData>
+          <ows:DataType>xs:double</ows:DataType>
+          <ows:AnyValue />
+        </LiteralData>
+      </Input>
+      <Input maxOccurs="1" minOccurs="0">
+        <ows:Identifier>avgFloorValue</ows:Identifier>
+        <ows:Title>avgFloorValue</ows:Title>
+        <ows:Abstract>평균층수(층(default:1.5)</ows:Abstract>
+        <LiteralData>
+          <ows:DataType>xs:double</ows:DataType>
+          <ows:AnyValue />
+        </LiteralData>
+      </Input>
+      <Input maxOccurs="1" minOccurs="0">
+        <ows:Identifier>bldgCoverageValue</ows:Identifier>
+        <ows:Title>bldgCoverageValue</ows:Title>
+        <ows:Abstract>건폐율(%)(default:60)</ows:Abstract>
+        <LiteralData>
+          <ows:DataType>xs:double</ows:DataType>
+          <ows:AnyValue />
+        </LiteralData>
+      </Input>
+      <Input maxOccurs="1" minOccurs="0">
+        <ows:Identifier>publicLotValue</ows:Identifier>
+        <ows:Title>publicLotValue</ows:Title>
+        <ows:Abstract>공공용지율(%)(default:30)</ows:Abstract>
+        <LiteralData>
+          <ows:DataType>xs:double</ows:DataType>
+          <ows:AnyValue />
+        </LiteralData>
+      </Input>
+      <Input maxOccurs="1" minOccurs="0">
+        <ows:Identifier>mixtureValue</ows:Identifier>
+        <ows:Title>mixtureValue</ows:Title>
+        <ows:Abstract>혼합율(%)(default:15)</ows:Abstract>
+        <LiteralData>
+          <ows:DataType>xs:double</ows:DataType>
+          <ows:AnyValue />
+        </LiteralData>
+      </Input>
+    </DataInputs>
+    <ProcessOutputs>
+      <Output>
+        <ows:Identifier>result</ows:Identifier>
+        <ows:Title>Result</ows:Title>
+        <ComplexOutput>
+          <Default>
+            <Format>
+              <MimeType>text/xml</MimeType>
+            </Format>
+          </Default>
+          <Supported>
+            <Format>
+              <MimeType>text/xml</MimeType>
+            </Format>
+          </Supported>
+        </ComplexOutput>
+      </Output>
+    </ProcessOutputs>
+  </ProcessDescription>
+</wps:ProcessDescriptions>

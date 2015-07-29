@@ -1,0 +1,119 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<wps:ProcessDescriptions xml:lang="en" service="WPS" version="1.0.0" xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsAll.xsd" xmlns:wps="http://www.opengis.net/wps/1.0.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <ProcessDescription wps:processVersion="1.0.0" statusSupported="true" storeSupported="true">
+    <ows:Identifier>kopss:VA_Select</ows:Identifier>
+    <ows:Title>VA_Select</ows:Title>
+    <ows:Abstract>Extracts selected features from an input feature class based on an attribute query and stores them in the output feature class.</ows:Abstract>
+    <DataInputs>
+      <Input maxOccurs="1" minOccurs="1">
+        <ows:Identifier>inputFeatures</ows:Identifier>
+        <ows:Title>Input features</ows:Title>
+        <ows:Abstract>The input features to be processed.</ows:Abstract>
+        <ComplexData>
+          <Default>
+            <Format>
+              <MimeType>text/xml; subtype=wfs-collection/1.1</MimeType>
+            </Format>
+          </Default>
+          <Supported>
+            <Format>
+              <MimeType>text/xml; subtype=wfs-collection/1.1</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=wfs-collection/1.0</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/json</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/wfs-collection-1.1</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/wfs-collection-1.0</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=gml/3.2.1</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=gml/3.1.1</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=gml/2.1.2</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=kml/2.1</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=kml/2.2</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/vnd.google-earth.kml+xml</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/zip</MimeType>
+            </Format>
+          </Supported>
+        </ComplexData>
+      </Input>
+      <Input maxOccurs="1" minOccurs="1">
+        <ows:Identifier>whereClause</ows:Identifier>
+        <ows:Title>SQL where clause expression</ows:Title>
+        <ows:Abstract>An SQL expression used to select a subset of features.</ows:Abstract>
+        <LiteralData>
+          <ows:AnyValue />
+        </LiteralData>
+      </Input>
+    </DataInputs>
+    <ProcessOutputs>
+      <Output>
+        <ows:Identifier>result</ows:Identifier>
+        <ows:Title>Result</ows:Title>
+        <ComplexOutput>
+          <Default>
+            <Format>
+              <MimeType>text/xml; subtype=wfs-collection/1.1</MimeType>
+            </Format>
+          </Default>
+          <Supported>
+            <Format>
+              <MimeType>text/xml; subtype=wfs-collection/1.1</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=wfs-collection/1.0</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/json</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/wfs-collection-1.1</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/wfs-collection-1.0</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=gml/3.2.1</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=gml/3.1.1</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=gml/2.1.2</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=kml/2.1</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=kml/2.2</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/vnd.google-earth.kml+xml</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/zip</MimeType>
+            </Format>
+          </Supported>
+        </ComplexOutput>
+      </Output>
+    </ProcessOutputs>
+  </ProcessDescription>
+</wps:ProcessDescriptions>

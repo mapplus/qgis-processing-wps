@@ -1,0 +1,214 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<wps:ProcessDescriptions xml:lang="en" service="WPS" version="1.0.0" xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsAll.xsd" xmlns:wps="http://www.opengis.net/wps/1.0.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <ProcessDescription wps:processVersion="1.0.0" statusSupported="true" storeSupported="true">
+    <ows:Identifier>kopss:VA_MultipleRingBuffer</ows:Identifier>
+    <ows:Title>VA_MultipleRingBuffer</ows:Title>
+    <ows:Abstract>Creates multiple buffers at specified distances around the input features. the linear unit of the input features' spatial reference is used</ows:Abstract>
+    <DataInputs>
+      <Input maxOccurs="1" minOccurs="0">
+        <ows:Identifier>inputFeatures</ows:Identifier>
+        <ows:Title>Input features</ows:Title>
+        <ows:Abstract>input feature collection</ows:Abstract>
+        <ComplexData>
+          <Default>
+            <Format>
+              <MimeType>text/xml; subtype=wfs-collection/1.1</MimeType>
+            </Format>
+          </Default>
+          <Supported>
+            <Format>
+              <MimeType>text/xml; subtype=wfs-collection/1.1</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=wfs-collection/1.0</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/json</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/wfs-collection-1.1</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/wfs-collection-1.0</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=gml/3.2.1</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=gml/3.1.1</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=gml/2.1.2</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=kml/2.1</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=kml/2.2</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/vnd.google-earth.kml+xml</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/zip</MimeType>
+            </Format>
+          </Supported>
+        </ComplexData>
+      </Input>
+      <Input maxOccurs="1" minOccurs="0">
+        <ows:Identifier>inputGeometry</ows:Identifier>
+        <ows:Title>Input geometry</ows:Title>
+        <ows:Abstract>input geometry</ows:Abstract>
+        <ComplexData>
+          <Default>
+            <Format>
+              <MimeType>text/xml; subtype=gml/3.1.1</MimeType>
+            </Format>
+          </Default>
+          <Supported>
+            <Format>
+              <MimeType>text/xml; subtype=gml/3.1.1</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=gml/2.1.2</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/wkt</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/gml-3.1.1</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/gml-2.1.2</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/wkb</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/json</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=kml/2.1</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=kml/2.2</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=georss</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=atom</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=svg</MimeType>
+            </Format>
+          </Supported>
+        </ComplexData>
+      </Input>
+      <Input maxOccurs="1" minOccurs="1">
+        <ows:Identifier>distance</ows:Identifier>
+        <ows:Title>Comma(,) seperated list of buffer distances</ows:Title>
+        <ows:Abstract>The list of buffer distances(unit:data unit) : ex)200, 300, 400, 500</ows:Abstract>
+        <LiteralData>
+          <ows:AnyValue />
+        </LiteralData>
+      </Input>
+      <Input maxOccurs="1" minOccurs="0">
+        <ows:Identifier>dissolveType</ows:Identifier>
+        <ows:Title>Dissolve type: None(default), All</ows:Title>
+        <ows:Abstract>Specifies the dissolve to be performed to remove output buffer overlap: None(default), All</ows:Abstract>
+        <LiteralData>
+          <ows:AllowedValues>
+            <ows:Value>None</ows:Value>
+            <ows:Value>All</ows:Value>
+          </ows:AllowedValues>
+        </LiteralData>
+      </Input>
+      <Input maxOccurs="1" minOccurs="0">
+        <ows:Identifier>outside</ows:Identifier>
+        <ows:Title>Outside</ows:Title>
+        <ows:Abstract>Buffers will overlap or cover the input features.: False(default), True</ows:Abstract>
+        <LiteralData>
+          <ows:DataType>xs:boolean</ows:DataType>
+          <ows:AnyValue />
+        </LiteralData>
+      </Input>
+      <Input maxOccurs="1" minOccurs="0">
+        <ows:Identifier>endCapStyle</ows:Identifier>
+        <ows:Title>End Cap Style: CAP_ROUND(1, default), CAP_FLAT(2), CAP_SQUARE(3)</ows:Title>
+        <ows:Abstract>The buffer cap style, CAP_ROUND(1, default), CAP_FLAT(2), CAP_SQUARE(3)</ows:Abstract>
+        <LiteralData>
+          <ows:AnyValue />
+        </LiteralData>
+      </Input>
+      <Input maxOccurs="1" minOccurs="0">
+        <ows:Identifier>joinStyle</ows:Identifier>
+        <ows:Title>Join Style: JOIN_ROUND(1, default), JOIN_MITRE(2), JOIN_BEVEL(3)</ows:Title>
+        <ows:Abstract>The buffer join style, JOIN_ROUND(1, default), JOIN_MITRE(2), JOIN_BEVEL(3)</ows:Abstract>
+        <LiteralData>
+          <ows:AnyValue />
+        </LiteralData>
+      </Input>
+      <Input maxOccurs="1" minOccurs="0">
+        <ows:Identifier>quadrantSegments</ows:Identifier>
+        <ows:Title>Quadrant Segments: 24(default)</ows:Title>
+        <ows:Abstract>The default number of facets into which to divide a fillet of 90 degrees. default = 24</ows:Abstract>
+        <LiteralData>
+          <ows:DataType>xs:int</ows:DataType>
+          <ows:AnyValue />
+        </LiteralData>
+      </Input>
+    </DataInputs>
+    <ProcessOutputs>
+      <Output>
+        <ows:Identifier>result</ows:Identifier>
+        <ows:Title>Result</ows:Title>
+        <ComplexOutput>
+          <Default>
+            <Format>
+              <MimeType>text/xml; subtype=wfs-collection/1.1</MimeType>
+            </Format>
+          </Default>
+          <Supported>
+            <Format>
+              <MimeType>text/xml; subtype=wfs-collection/1.1</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=wfs-collection/1.0</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/json</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/wfs-collection-1.1</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/wfs-collection-1.0</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=gml/3.2.1</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=gml/3.1.1</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=gml/2.1.2</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=kml/2.1</MimeType>
+            </Format>
+            <Format>
+              <MimeType>text/xml; subtype=kml/2.2</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/vnd.google-earth.kml+xml</MimeType>
+            </Format>
+            <Format>
+              <MimeType>application/zip</MimeType>
+            </Format>
+          </Supported>
+        </ComplexOutput>
+      </Output>
+    </ProcessOutputs>
+  </ProcessDescription>
+</wps:ProcessDescriptions>

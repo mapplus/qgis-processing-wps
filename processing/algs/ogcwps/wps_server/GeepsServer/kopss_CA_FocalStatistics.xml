@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<wps:ProcessDescriptions xml:lang="en" service="WPS" version="1.0.0" xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsAll.xsd" xmlns:wps="http://www.opengis.net/wps/1.0.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <ProcessDescription wps:processVersion="1.0.0" statusSupported="true" storeSupported="true">
+    <ows:Identifier>kopss:CA_FocalStatistics</ows:Identifier>
+    <ows:Title>CA_FocalStatistics</ows:Title>
+    <ows:Abstract>Calculates a statistic on a raster over a specified neighborhood</ows:Abstract>
+    <DataInputs>
+      <Input maxOccurs="1" minOccurs="1">
+        <ows:Identifier>inputCoverage</ows:Identifier>
+        <ows:Title>The raster to perform the focal statistics calculations on.</ows:Title>
+        <ows:Abstract>The raster to perform the focal statistics calculations on.</ows:Abstract>
+        <ComplexData>
+          <Default>
+            <Format>
+              <MimeType>application/arcgrid</MimeType>
+            </Format>
+          </Default>
+          <Supported>
+            <Format>
+              <MimeType>application/arcgrid</MimeType>
+            </Format>
+            <Format>
+              <MimeType>image/geotiff</MimeType>
+            </Format>
+            <Format>
+              <MimeType>image/tiff</MimeType>
+            </Format>
+          </Supported>
+        </ComplexData>
+      </Input>
+      <Input maxOccurs="1" minOccurs="0">
+        <ows:Identifier>neighborhood</ows:Identifier>
+        <ows:Title>Neighborhood</ows:Title>
+        <ows:Abstract>neighborhood: Circle+Radius+CELL, Rectangle+width+height, Default = Rectangle+3+3+CELL</ows:Abstract>
+        <LiteralData>
+          <ows:AnyValue />
+        </LiteralData>
+      </Input>
+      <Input maxOccurs="1" minOccurs="0">
+        <ows:Identifier>statisticType</ows:Identifier>
+        <ows:Title>Statistics type</ows:Title>
+        <ows:Abstract>statisticType: MEAN(Default), MAJORITY, MAXIMUM, MEDIAN, MINIMUM, MINORITY, RANGE, STD, SUM, VARIETY</ows:Abstract>
+        <LiteralData>
+          <ows:AllowedValues>
+            <ows:Value>MEAN</ows:Value>
+            <ows:Value>MAJORITY</ows:Value>
+            <ows:Value>MAXIMUM</ows:Value>
+            <ows:Value>MEDIAN</ows:Value>
+            <ows:Value>MINIMUM</ows:Value>
+            <ows:Value>MINORITY</ows:Value>
+            <ows:Value>RANGE</ows:Value>
+            <ows:Value>STD</ows:Value>
+            <ows:Value>SUM</ows:Value>
+            <ows:Value>VARIETY</ows:Value>
+          </ows:AllowedValues>
+        </LiteralData>
+      </Input>
+      <Input maxOccurs="1" minOccurs="0">
+        <ows:Identifier>ignoreNodata</ows:Identifier>
+        <ows:Title>Ignore Nodata</ows:Title>
+        <ows:Abstract>ignoreNodata: Denotes whether NoData values are ignored by the statistic calculation</ows:Abstract>
+        <LiteralData>
+          <ows:DataType>xs:boolean</ows:DataType>
+          <ows:AnyValue />
+        </LiteralData>
+      </Input>
+    </DataInputs>
+    <ProcessOutputs>
+      <Output>
+        <ows:Identifier>result</ows:Identifier>
+        <ows:Title>Result</ows:Title>
+        <ComplexOutput>
+          <Default>
+            <Format>
+              <MimeType>application/arcgrid</MimeType>
+            </Format>
+          </Default>
+          <Supported>
+            <Format>
+              <MimeType>application/arcgrid</MimeType>
+            </Format>
+            <Format>
+              <MimeType>image/geotiff</MimeType>
+            </Format>
+            <Format>
+              <MimeType>image/tiff</MimeType>
+            </Format>
+          </Supported>
+        </ComplexOutput>
+      </Output>
+    </ProcessOutputs>
+  </ProcessDescription>
+</wps:ProcessDescriptions>
