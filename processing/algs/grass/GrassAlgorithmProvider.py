@@ -36,6 +36,9 @@ from GrassAlgorithm import GrassAlgorithm
 from nviz import nviz
 from processing.tools.system import isMac, isWindows
 
+pluginPath = os.path.normpath(os.path.join(
+    os.path.split(os.path.dirname(__file__))[0], os.pardir))
+
 
 class GrassAlgorithmProvider(AlgorithmProvider):
 
@@ -48,10 +51,10 @@ class GrassAlgorithmProvider(AlgorithmProvider):
         if isWindows() or isMac():
             ProcessingConfig.addSetting(Setting(self.getDescription(),
                 GrassUtils.GRASS_FOLDER, self.tr('GRASS folder'),
-                GrassUtils.grassPath()))
+                GrassUtils.grassPath(), valuetype=Setting.FOLDER))
             ProcessingConfig.addSetting(Setting(self.getDescription(),
                 GrassUtils.GRASS_WIN_SHELL, self.tr('Msys folder'),
-                GrassUtils.grassWinShell()))
+                GrassUtils.grassWinShell(), valuetype=Setting.FOLDER))
         ProcessingConfig.addSetting(Setting(self.getDescription(),
             GrassUtils.GRASS_LOG_COMMANDS,
             self.tr('Log execution commands'), False))
@@ -94,7 +97,7 @@ class GrassAlgorithmProvider(AlgorithmProvider):
         return 'grass'
 
     def getIcon(self):
-        return QIcon(os.path.dirname(__file__) + '/../../images/grass.png')
+        return QIcon(os.path.join(pluginPath, 'images', 'grass.png'))
 
     def getSupportedOutputVectorLayerExtensions(self):
         return ['shp']

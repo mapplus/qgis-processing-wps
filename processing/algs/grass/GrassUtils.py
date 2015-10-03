@@ -165,7 +165,7 @@ class GrassUtils:
         output.write('g.gisenv.exe set="GISDBASE=' + gisdbase + '"\n')
         output.write('g.gisenv.exe set="GRASS_GUI=text"\n')
         for command in commands:
-            output.write(command + '\n')
+            output.write(command.encode('utf8') + '\n')
         output.write('\n')
         output.write('exit\n')
         output.close()
@@ -174,7 +174,7 @@ class GrassUtils:
     def createGrassBatchJobFileFromGrassCommands(commands):
         fout = codecs.open(GrassUtils.grassBatchJobFilename(), 'w', encoding='utf-8')
         for command in commands:
-            fout.write(command + '\n')
+            fout.write(command.encode('utf8') + '\n')
         fout.write('exit')
         fout.close()
 
@@ -319,7 +319,8 @@ class GrassUtils:
 
         if ProcessingConfig.getSetting(GrassUtils.GRASS_LOG_CONSOLE):
             ProcessingLog.addToLog(ProcessingLog.LOG_INFO, loglines)
-        return loglines
+
+
 
     # GRASS session is used to hold the layers already exported or
     # produced in GRASS between multiple calls to GRASS algorithms.

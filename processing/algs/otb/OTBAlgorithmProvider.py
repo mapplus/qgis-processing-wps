@@ -29,12 +29,16 @@ __copyright__ = '(C) 2012, Victor Olaya'
 __revision__ = '$Format:%H$'
 
 import os
-import PyQt4.QtGui
+from PyQt4.QtGui import QIcon
 from processing.core.AlgorithmProvider import AlgorithmProvider
 from processing.core.ProcessingConfig import ProcessingConfig, Setting
 from OTBUtils import OTBUtils
 from OTBAlgorithm import OTBAlgorithm
 from processing.core.ProcessingLog import ProcessingLog
+
+pluginPath = os.path.normpath(os.path.join(
+    os.path.split(os.path.dirname(__file__))[0], os.pardir))
+
 
 class OTBAlgorithmProvider(AlgorithmProvider):
 
@@ -51,7 +55,7 @@ class OTBAlgorithmProvider(AlgorithmProvider):
         return "otb"
 
     def getIcon(self):
-        return PyQt4.QtGui.QIcon(os.path.dirname(__file__) + "/../../images/otb.png")
+        return QIcon(os.path.join(pluginPath, 'images', 'otb.png'))
 
     def _loadAlgorithms(self):
         self.algs = self.preloadedAlgs
@@ -79,17 +83,21 @@ class OTBAlgorithmProvider(AlgorithmProvider):
         if OTBUtils.findOtbPath() is None:
             ProcessingConfig.addSetting(Setting(self.getDescription(),
                 OTBUtils.OTB_FOLDER,
-                self.tr("OTB command line tools folder"), OTBUtils.otbPath()))
+                self.tr("OTB command line tools folder"), OTBUtils.otbPath(),
+                valuetype=Setting.FOLDER))
         if OTBUtils.findOtbLibPath() is None:
             ProcessingConfig.addSetting(Setting(self.getDescription(),
                 OTBUtils.OTB_LIB_FOLDER,
-                self.tr("OTB applications folder"), OTBUtils.otbLibPath()))
+                self.tr("OTB applications folder"), OTBUtils.otbLibPath(),
+                valuetype=Setting.FOLDER))
         ProcessingConfig.addSetting(Setting(self.getDescription(),
             OTBUtils.OTB_SRTM_FOLDER,
-            self.tr("SRTM tiles folder"), OTBUtils.otbSRTMPath()))
+            self.tr("SRTM tiles folder"), OTBUtils.otbSRTMPath(),
+            valuetype=Setting.FOLDER))
         ProcessingConfig.addSetting(Setting(self.getDescription(),
             OTBUtils.OTB_GEOID_FILE,
-            self.tr("Geoid file"), OTBUtils.otbGeoidPath()))
+            self.tr("Geoid file"), OTBUtils.otbGeoidPath(),
+            valuetype=Setting.FOLDER))
 
     def unload(self):
         AlgorithmProvider.unload(self)

@@ -28,7 +28,9 @@ __revision__ = '$Format:%H$'
 
 import sys
 import os
+import re
 
+from processing.tools.vector import resolveFieldIndex, features
 from PyQt4.QtCore import QCoreApplication
 from qgis.core import QgsRasterLayer, QgsVectorLayer
 from processing.tools.system import isWindows
@@ -146,11 +148,9 @@ class ParameterDataObject(Parameter):
         if self.value is None:
             return unicode(None)
         else:
-            if not isWindows():
-                return '"' + unicode(self.value) + '"'
-            else:
-                return '"' + unicode(self.value).replace('\\', '\\\\') + '"'
-
+            s = dataobjects.normalizeLayerSource(unicode(self.value))
+            s = '"%s"' % s
+            return s
 
 class ParameterExtent(Parameter):
 
@@ -515,16 +515,7 @@ class ParameterRaster(ParameterDataObject):
             return True
         else:
             self.value = unicode(obj)
-            layers = dataobjects.getRasterLayers()
-            for layer in layers:
-                if layer.name() == self.value:
-                    self.value = unicode(layer.dataProvider().dataSourceUri())
-                    return True
-            if os.path.exists(self.value) or QgsRasterLayer(self.value).isValid():
-                return True
-            else:
-                # Layer could not be found
-                return False
+            return True
 
 
     def getFileFilter(self):
@@ -536,10 +527,21 @@ class ParameterRaster(ParameterDataObject):
 
 class ParameterSelection(Parameter):
 
-    def __init__(self, name='', description='', options=[], default=0):
+    def __init__(self, name='', description='', options=[], default=0, isSource = False):
         Parameter.__init__(self, name, description)
         self.options = options
-        if isinstance(self.options, basestring):
+        if isSource:
+            self.options = []
+            layer = QgsVectorLayer(options[0], "layer", "ogr")
+            if layer.isValid():
+                try:
+                    index = resolveFieldIndex(layer, options[1])
+                    feats = features(layer)
+                    for feature in feats:
+                        self.options.append(unicode(feature.attributes()[index]))
+                except ValueError:
+                    pass
+        elif isinstance(self.options, basestring):
             self.options = self.options.split(";")
         self.value = None
         self.default = int(default)
@@ -608,9 +610,10 @@ class ParameterTable(ParameterDataObject):
             self.value = source
             return True
         else:
-            layers = dataobjects.getVectorLayers()
+            self.value = unicode(obj)
+            layers = dataobjects.getTables()
             for layer in layers:
-                if layer.name() == self.value:
+                if layer.name() == self.value or layer.source() == self.value:
                     source = unicode(layer.source())
                     self.value = source
                     return True
@@ -724,12 +727,8 @@ class ParameterVector(ParameterDataObject):
             return True
         else:
             self.value = unicode(obj)
-            layers = dataobjects.getVectorLayers(self.shapetype)
-            for layer in layers:
-                if layer.name() == self.value or layer.source() == self.value:
-                    self.value = unicode(layer.source())
-                    return True
-            return os.path.exists(self.value)
+            return True
+
 
     def getSafeExportedLayer(self):
         """Returns not the value entered by the user, but a string with

@@ -37,6 +37,10 @@ from SplitRGBBands import SplitRGBBands
 import SagaUtils
 from processing.tools.system import isWindows, isMac
 
+pluginPath = os.path.normpath(os.path.join(
+    os.path.split(os.path.dirname(__file__))[0], os.pardir))
+
+
 class SagaAlgorithmProvider(AlgorithmProvider):
 
     supportedVersions = {"2.1.2": ("2.1.2", SagaAlgorithm212),
@@ -50,10 +54,10 @@ class SagaAlgorithmProvider(AlgorithmProvider):
         self.activate = True
 
     def initializeSettings(self):
-        AlgorithmProvider.initializeSettings(self)
         if isWindows() or isMac():
             ProcessingConfig.addSetting(Setting("SAGA",
-                SagaUtils.SAGA_FOLDER, self.tr('SAGA folder'), ''))
+                SagaUtils.SAGA_FOLDER, self.tr('SAGA folder'), '',
+                valuetype=Setting.FOLDER))
         ProcessingConfig.addSetting(Setting("SAGA",
             SagaUtils.SAGA_IMPORT_EXPORT_OPTIMIZATION,
             self.tr('Enable SAGA Import/Export optimizations'), False))
@@ -63,6 +67,9 @@ class SagaAlgorithmProvider(AlgorithmProvider):
         ProcessingConfig.addSetting(Setting("SAGA",
             SagaUtils.SAGA_LOG_CONSOLE,
             self.tr('Log console output'), True))
+        ProcessingConfig.settingIcons["SAGA"] = self.getIcon()
+        ProcessingConfig.addSetting(Setting("SAGA", "ACTIVATE_SAGA",
+                                    self.tr('Activate'), self.activate))
 
     def unload(self):
         AlgorithmProvider.unload(self)
@@ -85,7 +92,7 @@ class SagaAlgorithmProvider(AlgorithmProvider):
             return
 
         folder = SagaUtils.sagaDescriptionPath()
-        folder = os.path.join(folder, self.supportedVersions[SagaUtils.getSagaInstalledVersion()][0])
+        folder = os.path.join(folder, self.supportedVersions[version][0])
         for descriptionFile in os.listdir(folder):
             if descriptionFile.endswith('txt'):
                 f = os.path.join(folder, descriptionFile)
@@ -115,10 +122,10 @@ class SagaAlgorithmProvider(AlgorithmProvider):
         return ['shp']
 
     def getSupportedOutputRasterLayerExtensions(self):
-        return ['tif']
+        return ['sdat']
 
     def getSupportedOutputTableLayerExtensions(self):
         return ['dbf']
 
     def getIcon(self):
-        return QIcon(os.path.dirname(__file__) + '/../../images/saga.png')
+        return QIcon(os.path.join(pluginPath, 'images', 'saga.png'))

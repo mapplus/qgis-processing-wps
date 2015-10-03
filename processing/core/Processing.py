@@ -17,7 +17,6 @@
 ***************************************************************************
 """
 
-
 __author__ = 'Victor Olaya'
 __date__ = 'August 2012'
 __copyright__ = '(C) 2012, Victor Olaya'
@@ -34,11 +33,11 @@ from PyQt4.QtGui import QApplication, QCursor
 from qgis.utils import iface
 
 import processing
+from processing.gui import AlgorithmClassification
 from processing.modeler.ModelerUtils import ModelerUtils
 from processing.core.ProcessingConfig import ProcessingConfig
 from processing.core.GeoAlgorithm import GeoAlgorithm
 from processing.core.ProcessingLog import ProcessingLog
-from processing.gui.AlgorithmClassification import AlgorithmDecorator
 from processing.gui.MessageBarProgress import MessageBarProgress
 from processing.gui.RenderingStyles import RenderingStyles
 from processing.gui.Postprocessing import handleAlgorithmResults
@@ -77,7 +76,7 @@ class Processing:
     modeler = ModelerAlgorithmProvider()
 
     @staticmethod
-    def addProvider(provider, updateList=False):
+    def addProvider(provider, updateList=True):
         """Use this method to add algorithms from external providers.
         """
 
@@ -128,23 +127,25 @@ class Processing:
     @staticmethod
     def initialize():
         # Add the basic providers
-        Processing.addProvider(QGISAlgorithmProvider())
-        Processing.addProvider(ModelerOnlyAlgorithmProvider())
-        Processing.addProvider(GdalOgrAlgorithmProvider())
-        Processing.addProvider(LidarToolsAlgorithmProvider())
-        Processing.addProvider(OTBAlgorithmProvider())
-        Processing.addProvider(RAlgorithmProvider())
-        Processing.addProvider(SagaAlgorithmProvider())
-        Processing.addProvider(GrassAlgorithmProvider())
-        Processing.addProvider(Grass7AlgorithmProvider())
-        Processing.addProvider(ScriptAlgorithmProvider())
-        Processing.addProvider(TauDEMAlgorithmProvider())
-        Processing.addProvider(WPSAlgorithmProvider())        # WPS Algorithms
-        Processing.addProvider(Processing.modeler)
+        Processing.addProvider(QGISAlgorithmProvider(), updateList=False)
+        Processing.addProvider(ModelerOnlyAlgorithmProvider(), updateList=False)
+        Processing.addProvider(GdalOgrAlgorithmProvider(), updateList=False)
+        Processing.addProvider(LidarToolsAlgorithmProvider(), updateList=False)
+        Processing.addProvider(OTBAlgorithmProvider(), updateList=False)
+        Processing.addProvider(RAlgorithmProvider(), updateList=False)
+        Processing.addProvider(SagaAlgorithmProvider(), updateList=False)
+        Processing.addProvider(GrassAlgorithmProvider(), updateList=False)
+        Processing.addProvider(Grass7AlgorithmProvider(), updateList=False)
+        Processing.addProvider(ScriptAlgorithmProvider(), updateList=False)
+        Processing.addProvider(TauDEMAlgorithmProvider(), updateList=False)
+        Processing.addProvider(Processing.modeler, updateList=False)
+        # New WPS Algorithms
+        Processing.addProvider(WPSAlgorithmProvider(), updateList=False)
         Processing.modeler.initializeSettings()
 
         # And initialize
-        AlgorithmDecorator.loadClassification()
+        AlgorithmClassification.loadClassification()
+        AlgorithmClassification.loadDisplayNames()
         ProcessingLog.startLogging()
         ProcessingConfig.initialize()
         ProcessingConfig.readSettings()
@@ -329,7 +330,7 @@ class Processing:
                         return
                     i = i + 1
 
-        msg = alg.checkParameterValuesBeforeExecuting()
+        msg = alg._checkParameterValuesBeforeExecuting()
         if msg:
             print 'Unable to execute algorithm\n' + msg
             return
@@ -349,10 +350,14 @@ class Processing:
 
         progress = None
         if iface is not None :
-            progress = MessageBarProgress()
+            progress = MessageBarProgress(alg.name)
         ret = runalg(alg, progress)
-        if onFinish is not None and ret:
-            onFinish(alg, progress)
+        if ret:
+            if onFinish is not None:
+                onFinish(alg, progress)
+        else:
+            print ("There were errors executing the algorithm.\n"
+                    "Check the QGIS log to get more information")
 
         if iface is not None:
           QApplication.restoreOverrideCursor()

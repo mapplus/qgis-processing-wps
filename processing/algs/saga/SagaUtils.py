@@ -106,13 +106,21 @@ def getSagaInstalledVersion(runSaga=False):
     global _installedVersion
     global _installedVersionFound
 
-    if not _installedVersionFound or runSaga:
-        if isWindows():
-            commands = [os.path.join(sagaPath(), "saga_cmd.exe"), "-v"]
-        elif isMac():
-            commands = [os.path.join(sagaPath(), "saga_cmd"), "-v"]
-        else:
-            commands = ["saga_cmd", "-v"]
+    maxRetries = 5
+    retries = 0
+    if _installedVersionFound and not runSaga:
+        return _installedVersion
+
+    if isWindows():
+        commands = [os.path.join(sagaPath(), "saga_cmd.exe"), "-v"]
+    elif isMac():
+        commands = [os.path.join(sagaPath(), "saga_cmd -v")]
+    else:
+        # for Linux use just one string instead of separated parameters as the list
+        # does not work well together with shell=True option
+        # (python docs advices to use subprocess32 instead of python2.7's subprocess)
+        commands = ["saga_cmd -v"]
+    while retries < maxRetries:
         proc = subprocess.Popen(
             commands,
             shell=True,
@@ -121,12 +129,21 @@ def getSagaInstalledVersion(runSaga=False):
             stderr=subprocess.STDOUT,
             universal_newlines=True,
         ).stdout
-        lines = proc.readlines()
-        for line in lines:
-            if line.startswith("SAGA Version:"):
-                _installedVersion = line[len("SAGA Version:"):].strip().split(" ")[0]
-        _installedVersionFound = True
+        try:
+            lines = proc.readlines()
+            for line in lines:
+                if line.startswith("SAGA Version:"):
+                    _installedVersion = line[len("SAGA Version:"):].strip().split(" ")[0]
+                    _installedVersionFound = True
+                    return _installedVersion
+            return None
+        except IOError:
+            retries += 1
+        except:
+            return None
+
     return _installedVersion
+
 
 def executeSaga(progress):
     if isWindows():
@@ -145,17 +162,20 @@ def executeSaga(progress):
         stderr=subprocess.STDOUT,
         universal_newlines=True,
     ).stdout
-    for line in iter(proc.readline, ''):
-        if '%' in line:
-            s = ''.join([x for x in line if x.isdigit()])
-            try:
-                progress.setPercentage(int(s))
-            except:
-                pass
-        else:
-            line = line.strip()
-            if line != '/' and line != '-' and line != '\\' and line != '|':
-                loglines.append(line)
-                progress.setConsoleInfo(line)
+    try:
+        for line in iter(proc.readline, ''):
+            if '%' in line:
+                s = ''.join([x for x in line if x.isdigit()])
+                try:
+                    progress.setPercentage(int(s))
+                except:
+                    pass
+            else:
+                line = line.strip()
+                if line != '/' and line != '-' and line != '\\' and line != '|':
+                    loglines.append(line)
+                    progress.setConsoleInfo(line)
+    except:
+        pass
     if ProcessingConfig.getSetting(SAGA_LOG_CONSOLE):
         ProcessingLog.addToLog(ProcessingLog.LOG_INFO, loglines)

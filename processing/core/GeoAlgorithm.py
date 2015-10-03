@@ -17,6 +17,7 @@
 ***************************************************************************
 """
 
+
 __author__ = 'Victor Olaya'
 __date__ = 'August 2012'
 __copyright__ = '(C) 2012, Victor Olaya'
@@ -27,10 +28,11 @@ __revision__ = '$Format:%H$'
 
 import os.path
 import traceback
+import subprocess
 import copy
 
 from PyQt4.QtGui import QIcon
-from PyQt4.QtCore import QCoreApplication
+from PyQt4.QtCore import QCoreApplication, QSettings
 from qgis.core import QGis, QgsRasterFileWriter
 
 from processing.core.ProcessingLog import ProcessingLog
@@ -119,7 +121,7 @@ class GeoAlgorithm:
 
         qgsVersion = QGis.QGIS_VERSION_INT
         major = qgsVersion / 10000
-        minor = minor = (qgsVersion - major * 10000) / 100
+        minor = (qgsVersion - major * 10000) / 100
         if minor % 2 == 1:
             qgsVersion = 'testing'
         else:
@@ -139,13 +141,6 @@ class GeoAlgorithm:
         helpUrl = 'http://docs.qgis.org/{}/en/docs/user_manual/processing_algs/{}/{}/{}.html'.format(qgsVersion, providerName, safeGroupName, safeAlgName)
         return False, helpUrl
 
-        # name = self.commandLineName().split(':')[1].lower()
-        # filename = os.path.join(os.path.dirname(inspect.getfile(self.__class__)), 'help', name + '.rst')
-        # try:
-        #   html = getHtmlFromRstFile(filename)
-        #   return True, html
-        # except:
-        #   return False, None
 
     def processAlgorithm(self):
         """Here goes the algorithm itself.
@@ -251,6 +246,21 @@ class GeoAlgorithm:
             raise GeoAlgorithmExecutionException(
                 str(e) + self.tr('\nSee log for more details'))
 
+    def _checkParameterValuesBeforeExecuting(self):
+        for param in self.parameters:
+            if isinstance(param, (ParameterRaster, ParameterVector,
+                          ParameterMultipleInput)):
+                if param.value:
+                    if isinstance(param, ParameterMultipleInput):
+                        inputlayers = param.value.split(';')
+                    else:
+                        inputlayers = [param.value]
+                    for inputlayer in inputlayers:
+                        obj = dataobjects.getObjectFromUri(inputlayer)
+                        if obj is None:
+                            return "Wrong parameter value: " + param.value
+        return self.checkParameterValuesBeforeExecuting()
+
     def runPostExecutionScript(self, progress):
         scriptFile = ProcessingConfig.getSetting(
             ProcessingConfig.POST_EXECUTION_SCRIPT)
@@ -301,13 +311,32 @@ class GeoAlgorithm:
             elif isinstance(out, OutputRaster):
                 if out.compatible is not None:
                     layer = dataobjects.getObjectFromUri(out.compatible)
-                    provider = layer.dataProvider()
-                    writer = QgsRasterFileWriter(out.value)
                     format = self.getFormatShortNameFromFilename(out.value)
-                    writer.setOutputFormat(format)
-                    writer.writeRaster(layer.pipe(), layer.width(),
-                                       layer.height(), layer.extent(),
-                                       layer.crs())
+                    orgFile = out.compatible
+                    destFile = out.value
+                    crsid = layer.crs().authid()
+                    settings = QSettings()
+                    path = unicode(settings.value('/GdalTools/gdalPath', ''))
+                    envval = unicode(os.getenv('PATH'))
+                    if not path.lower() in envval.lower().split(os.pathsep):
+                        envval += '%s%s' % (os.pathsep, path)
+                        os.putenv('PATH', envval)
+                    command = 'gdal_translate -of %s -a_srs %s %s %s' % (format, crsid, orgFile, destFile)
+                    if os.name == 'nt':
+                        command = command.split(" ")
+                    else:
+                        command = [command]
+                    proc = subprocess.Popen(
+                        command,
+                        shell=True,
+                        stdout=subprocess.PIPE,
+                        stdin=subprocess.PIPE,
+                        stderr=subprocess.STDOUT,
+                        universal_newlines=False,
+                        )
+                    proc.communicate()
+
+
             elif isinstance(out, OutputTable):
                 if out.compatible is not None:
                     layer = dataobjects.getObjectFromUri(out.compatible)
@@ -524,38 +553,6 @@ class GeoAlgorithm:
                 s += out.getValueAsCommandLineParameter() + ','
         s = s[:-1] + ')'
         return s
-
-    def getPostProcessingErrorMessage(self, wrongLayers):
-        """Returns the message to be shown to the user when, after
-        running this algorithm, there is a problem loading the
-        resulting layer.
-
-        This method should analyze if the problem is caused by wrong
-        entry data, a wrong or missing installation of a required 3rd
-        party app, or any other cause, and create an error response
-        accordingly.
-
-        Message is provided as an HTML code that will be displayed to
-        the user, and which might contains links to installation paths
-        for missing 3rd party apps.
-
-          - wrongLayers: a list of Output objects that could not be
-                         loaded.
-        """
-
-        html = self.tr('<p>Oooops! The following output layers could not be '
-                       'open</p><ul>\n')
-        for layer in wrongLayers:
-            html += self.tr('<li>%s: <font size=3 face="Courier New" '
-                            'color="#ff0000">%s</font></li>\n') % (
-                layer.description, layer.value
-            )
-        html += self.tr('</ul><p>The above files could not be opened, which '
-                        'probably indicates that they were not correctly '
-                        'produced by the executed algorithm</p>'
-                        '<p>Checking the log information might help you see '
-                        'why those layers were not created as expected</p>')
-        return html
 
     def tr(self, string, context=''):
         if context == '':

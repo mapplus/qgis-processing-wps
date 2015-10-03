@@ -281,6 +281,7 @@ class ModelerParametersDialog(QDialog):
         elif isinstance(param, ParameterSelection):
             item = QComboBox()
             item.addItems(param.options)
+            item.setCurrentIndex(param.default)
         elif isinstance(param, ParameterFixedTable):
             item = FixedTablePanel(param)
         elif isinstance(param, ParameterRange):
@@ -410,7 +411,10 @@ class ModelerParametersDialog(QDialog):
                 if param.hidden:
                     continue
                 widget = self.valueItems[param.name]
-                value = alg.params[param.name]
+                if param.name in alg.params:
+                    value = alg.params[param.name]
+                else:
+                    value = None
                 if isinstance(param, (
                         ParameterRaster,
                         ParameterVector,
