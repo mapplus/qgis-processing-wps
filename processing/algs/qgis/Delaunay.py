@@ -42,14 +42,14 @@ class Delaunay(GeoAlgorithm):
     OUTPUT = 'OUTPUT'
 
     def defineCharacteristics(self):
-        self.name = 'Delaunay triangulation'
-        self.group = 'Vector geometry tools'
+        self.name, self.i18n_name = self.trAlgorithm('Delaunay triangulation')
+        self.group, self.i18n_group = self.trAlgorithm('Vector geometry tools')
 
         self.addParameter(ParameterVector(self.INPUT,
-            self.tr('Input layer'), [ParameterVector.VECTOR_TYPE_POINT]))
+                                          self.tr('Input layer'), [ParameterVector.VECTOR_TYPE_POINT]))
 
         self.addOutput(OutputVector(self.OUTPUT,
-            self.tr('Delaunay triangulation')))
+                                    self.tr('Delaunay triangulation')))
 
     def processAlgorithm(self, progress):
         layer = dataobjects.getObjectFromUri(
@@ -60,14 +60,15 @@ class Delaunay(GeoAlgorithm):
                   QgsField('POINTC', QVariant.Double, '', 24, 15)]
 
         writer = self.getOutputFromName(self.OUTPUT).getVectorWriter(fields,
-                QGis.WKBPolygon, layer.crs())
+                                                                     QGis.WKBPolygon, layer.crs())
 
         pts = []
         ptDict = {}
         ptNdx = -1
         c = voronoi.Context()
         features = vector.features(layer)
-        for inFeat in features:
+        total = 100.0 / len(features)
+        for current, inFeat in enumerate(features):
             geom = QgsGeometry(inFeat.geometry())
             point = geom.asPoint()
             x = point.x()
@@ -75,6 +76,7 @@ class Delaunay(GeoAlgorithm):
             pts.append((x, y))
             ptNdx += 1
             ptDict[ptNdx] = inFeat.id()
+            progress.setPercentage(int(current * total))
 
         if len(pts) < 3:
             raise GeoAlgorithmExecutionException(
@@ -89,10 +91,8 @@ class Delaunay(GeoAlgorithm):
         triangles = c.triangles
         feat = QgsFeature()
 
-        current = 0
-        total = 100.0 / float(len(triangles))
-
-        for triangle in triangles:
+        total = 100.0 / len(triangles)
+        for current, triangle in enumerate(triangles):
             indicies = list(triangle)
             indicies.append(indicies[0])
             polygon = []
@@ -111,7 +111,6 @@ class Delaunay(GeoAlgorithm):
             geometry = QgsGeometry().fromPolygon([polygon])
             feat.setGeometry(geometry)
             writer.addFeature(feat)
-            current += 1
             progress.setPercentage(int(current * total))
 
         del writer

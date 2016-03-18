@@ -364,7 +364,7 @@ class KOPSSAlgorithm(WPSAlgorithm):
                     filepath = file_name + '.shp'
                     if WPSUtils.create_shapefile_from_WKT(wkt_path, filepath):
                         self.setOutputValue(output.identifier, filepath)
-                elif  'image' in output.mimeType:
+                elif 'image' in output.mimeType:
                     # raster data
                     file_name, file_ext = os.path.splitext(output_value)
                     filepath = file_name + '.tif'

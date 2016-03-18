@@ -46,24 +46,23 @@ class Grid(GeoAlgorithm):
     CRS = 'CRS'
     OUTPUT = 'OUTPUT'
 
-    TYPES = ['Rectangle (line)',
-             'Rectangle (polygon)',
-             'Diamond (polygon)',
-             'Hexagon (polygon)'
-             ]
-
     def defineCharacteristics(self):
-        self.name = 'Create grid'
-        self.group = 'Vector creation tools'
+        self.name, self.i18n_name = self.trAlgorithm('Create grid')
+        self.group, self.i18n_group = self.trAlgorithm('Vector creation tools')
+
+        self.types = [self.tr('Rectangle (line)'),
+                      self.tr('Rectangle (polygon)'),
+                      self.tr('Diamond (polygon)'),
+                      self.tr('Hexagon (polygon)')]
 
         self.addParameter(ParameterSelection(self.TYPE,
-            self.tr('Grid type'), self.TYPES))
+                                             self.tr('Grid type'), self.types))
         self.addParameter(ParameterExtent(self.EXTENT,
-            self.tr('Grid extent')))
+                                          self.tr('Grid extent')))
         self.addParameter(ParameterNumber(self.HSPACING,
-            self.tr('Horizontal spacing'), default=10.0))
+                                          self.tr('Horizontal spacing'), default=10.0))
         self.addParameter(ParameterNumber(self.VSPACING,
-            self.tr('Vertical spacing'), default=10.0))
+                                          self.tr('Vertical spacing'), default=10.0))
         self.addParameter(ParameterCrs(self.CRS, 'Grid CRS'))
 
         self.addOutput(OutputVector(self.OUTPUT, self.tr('Grid')))
@@ -82,8 +81,10 @@ class Grid(GeoAlgorithm):
         height = bbox.height()
         centerX = bbox.center().x()
         centerY = bbox.center().y()
-        originX = centerX - width / 2.0
-        originY = centerY - height / 2.0
+        #~ originX = centerX - width / 2.0
+        #~ originY = centerY - height / 2.0
+        originX = bbox.xMinimum()
+        originY = bbox.yMaximum()
 
         if hSpacing <= 0 or vSpacing <= 0:
             raise GeoAlgorithmExecutionException(
@@ -97,7 +98,8 @@ class Grid(GeoAlgorithm):
             raise GeoAlgorithmExecutionException(
                 self.tr('Vertical spacing is too small for the covered area'))
 
-        if self.TYPES[idx].find('polygon') >= 0:
+        #if self.types[idx].find(self.tr('polygon')) >= 0:
+        if idx != 0:
             geometryType = QGis.WKBPolygon
         else:
             geometryType = QGis.WKBLineString
@@ -109,7 +111,7 @@ class Grid(GeoAlgorithm):
                   ]
 
         writer = self.getOutputFromName(self.OUTPUT).getVectorWriter(fields,
-            geometryType, crs)
+                                                                     geometryType, crs)
 
         if idx == 0:
             self._rectangleGridLine(
@@ -130,15 +132,15 @@ class Grid(GeoAlgorithm):
                            hSpacing, vSpacing):
         ft = QgsFeature()
 
-        columns = int(math.floor(float(width) / hSpacing))
-        rows = int(math.floor(float(height) / vSpacing))
+        columns = int(math.ceil(float(width) / hSpacing))
+        rows = int(math.ceil(float(height) / vSpacing))
 
         # Longitude lines
         for col in xrange(0, columns + 1):
             polyline = []
             x = originX + (col * hSpacing)
             for row in xrange(0, rows + 1):
-                y = originY + (row * vSpacing)
+                y = originY - (row * vSpacing)
                 polyline.append(QgsPoint(x, y))
 
             ft.setGeometry(QgsGeometry.fromPolyline(polyline))
@@ -148,7 +150,7 @@ class Grid(GeoAlgorithm):
         # Latitude lines
         for row in xrange(0, rows + 1):
             polyline = []
-            y = originY + (row * vSpacing)
+            y = originY - (row * vSpacing)
             for col in xrange(0, columns + 1):
                 x = originX + (col * hSpacing)
                 polyline.append(QgsPoint(x, y))
@@ -161,8 +163,8 @@ class Grid(GeoAlgorithm):
                            hSpacing, vSpacing):
         ft = QgsFeature()
 
-        columns = int(math.floor(float(width) / hSpacing))
-        rows = int(math.floor(float(height) / vSpacing))
+        columns = int(math.ceil(float(width) / hSpacing))
+        rows = int(math.ceil(float(height) / vSpacing))
 
         for col in xrange(0, columns):
             # (column + 1) and (row + 1) calculation is used to maintain
@@ -171,8 +173,8 @@ class Grid(GeoAlgorithm):
             x1 = originX + (col * hSpacing)
             x2 = originX + ((col + 1) * hSpacing)
             for row in xrange(0, rows):
-                y1 = originY + (row * vSpacing)
-                y2 = originY + ((row + 1) * vSpacing)
+                y1 = originY - (row * vSpacing)
+                y2 = originY - ((row + 1) * vSpacing)
 
                 polyline = []
                 polyline.append(QgsPoint(x1, y1))
@@ -192,8 +194,8 @@ class Grid(GeoAlgorithm):
         halfHSpacing = hSpacing / 2
         halfVSpacing = vSpacing / 2
 
-        columns = int(math.floor(float(width) / halfHSpacing))
-        rows = int(math.floor(float(height) / vSpacing))
+        columns = int(math.ceil(float(width) / halfHSpacing))
+        rows = int(math.ceil(float(height) / vSpacing))
 
         for col in xrange(0, columns):
             x1 = originX + ((col + 0) * halfHSpacing)
@@ -202,20 +204,20 @@ class Grid(GeoAlgorithm):
 
             for row in xrange(0, rows):
                 if (col % 2) == 0:
-                    y1 = originY + (((row * 2) + 0) * halfVSpacing)
-                    y2 = originY + (((row * 2) + 1) * halfVSpacing)
-                    y3 = originY + (((row * 2) + 2) * halfVSpacing)
+                    y1 = originY - (((row * 2) + 0) * halfVSpacing)
+                    y2 = originY - (((row * 2) + 1) * halfVSpacing)
+                    y3 = originY - (((row * 2) + 2) * halfVSpacing)
                 else:
-                    y1 = originY + (((row * 2) + 1) * halfVSpacing)
-                    y2 = originY + (((row * 2) + 2) * halfVSpacing)
-                    y3 = originY + (((row * 2) + 3) * halfVSpacing)
+                    y1 = originY - (((row * 2) + 1) * halfVSpacing)
+                    y2 = originY - (((row * 2) + 2) * halfVSpacing)
+                    y3 = originY - (((row * 2) + 3) * halfVSpacing)
 
                 polyline = []
-                polyline.append(QgsPoint(x1,  y2))
-                polyline.append(QgsPoint(x2,  y1))
-                polyline.append(QgsPoint(x3,  y2))
-                polyline.append(QgsPoint(x2,  y3))
-                polyline.append(QgsPoint(x1,  y2))
+                polyline.append(QgsPoint(x1, y2))
+                polyline.append(QgsPoint(x2, y1))
+                polyline.append(QgsPoint(x3, y2))
+                polyline.append(QgsPoint(x2, y3))
+                polyline.append(QgsPoint(x1, y2))
 
                 ft.setGeometry(QgsGeometry.fromPolygon([polyline]))
                 ft.setAttributes([x1, y1, x3, y3])
@@ -232,8 +234,8 @@ class Grid(GeoAlgorithm):
 
         halfVSpacing = vSpacing / 2
 
-        columns = int(math.floor(float(width) / hSpacing))
-        rows = int(math.floor(float(height) / vSpacing))
+        columns = int(math.ceil(float(width) / hSpacing))
+        rows = int(math.ceil(float(height) / vSpacing))
 
         for col in xrange(0, columns):
             # (column + 1) and (row + 1) calculation is used to maintain
@@ -246,13 +248,13 @@ class Grid(GeoAlgorithm):
 
             for row in xrange(0, rows):
                 if (col % 2) == 0:
-                    y1 = originY + (((row * 2) + 0) * halfVSpacing) # hi
-                    y2 = originY + (((row * 2) + 1) * halfVSpacing) # mid
-                    y3 = originY + (((row * 2) + 2) * halfVSpacing) # lo
+                    y1 = originY - (((row * 2) + 0) * halfVSpacing) # hi
+                    y2 = originY - (((row * 2) + 1) * halfVSpacing) # mid
+                    y3 = originY - (((row * 2) + 2) * halfVSpacing) # lo
                 else:
-                    y1 = originY + (((row * 2) + 1) * halfVSpacing) # hi
-                    y2 = originY + (((row * 2) + 2) * halfVSpacing) # mid
-                    y3 = originY + (((row * 2) + 3) * halfVSpacing) # lo
+                    y1 = originY - (((row * 2) + 1) * halfVSpacing) # hi
+                    y2 = originY - (((row * 2) + 2) * halfVSpacing) # mid
+                    y3 = originY - (((row * 2) + 3) * halfVSpacing) # lo
 
                 polyline = []
                 polyline.append(QgsPoint(x1, y2))

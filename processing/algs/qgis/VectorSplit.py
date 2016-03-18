@@ -34,6 +34,7 @@ from processing.core.outputs import OutputDirectory
 from processing.tools import dataobjects, vector
 from processing.tools.system import mkdir
 
+
 class VectorSplit(GeoAlgorithm):
 
     INPUT = 'INPUT'
@@ -41,12 +42,12 @@ class VectorSplit(GeoAlgorithm):
     OUTPUT = 'OUTPUT'
 
     def defineCharacteristics(self):
-        self.name = 'Split vector layer'
-        self.group = 'Vector general tools'
+        self.name, self.i18n_name = self.trAlgorithm('Split vector layer')
+        self.group, self.i18n_group = self.trAlgorithm('Vector general tools')
         self.addParameter(ParameterVector(self.INPUT,
-            self.tr('Input layer'), [ParameterVector.VECTOR_TYPE_ANY]))
+                                          self.tr('Input layer'), [ParameterVector.VECTOR_TYPE_ANY]))
         self.addParameter(ParameterTableField(self.FIELD,
-            self.tr('Unique ID field'), self.INPUT))
+                                              self.tr('Unique ID field'), self.INPUT))
 
         self.addOutput(OutputDirectory(self.OUTPUT, self.tr('Output directory')))
 
@@ -68,7 +69,7 @@ class VectorSplit(GeoAlgorithm):
 
         total = 100.0 / len(uniqueValues)
 
-        for count, i in enumerate(uniqueValues):
+        for current, i in enumerate(uniqueValues):
             fName = u'{0}_{1}.shp'.format(baseName, unicode(i).strip())
 
             writer = vector.VectorWriter(fName, None, fields, geomType, crs)
@@ -77,4 +78,4 @@ class VectorSplit(GeoAlgorithm):
                     writer.addFeature(f)
             del writer
 
-            progress.setPercentage(int(count * total))
+            progress.setPercentage(int(current * total))

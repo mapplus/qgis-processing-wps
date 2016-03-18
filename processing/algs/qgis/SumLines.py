@@ -42,17 +42,17 @@ class SumLines(GeoAlgorithm):
     OUTPUT = 'OUTPUT'
 
     def defineCharacteristics(self):
-        self.name = 'Sum line lengths'
-        self.group = 'Vector analysis tools'
+        self.name, self.i18n_name = self.trAlgorithm('Sum line lengths')
+        self.group, self.i18n_group = self.trAlgorithm('Vector analysis tools')
 
         self.addParameter(ParameterVector(self.LINES,
-            self.tr('Lines'), [ParameterVector.VECTOR_TYPE_LINE]))
+                                          self.tr('Lines'), [ParameterVector.VECTOR_TYPE_LINE]))
         self.addParameter(ParameterVector(self.POLYGONS,
-            self.tr('Polygons'), [ParameterVector.VECTOR_TYPE_POLYGON]))
+                                          self.tr('Polygons'), [ParameterVector.VECTOR_TYPE_POLYGON]))
         self.addParameter(ParameterString(self.LEN_FIELD,
-            self.tr('Lines length field name', 'LENGTH')))
+                                          self.tr('Lines length field name', 'LENGTH')))
         self.addParameter(ParameterString(self.COUNT_FIELD,
-            self.tr('Lines count field name', 'COUNT')))
+                                          self.tr('Lines count field name', 'COUNT')))
 
         self.addOutput(OutputVector(self.OUTPUT, self.tr('Line length')))
 
@@ -65,9 +65,9 @@ class SumLines(GeoAlgorithm):
         polyProvider = polyLayer.dataProvider()
 
         (idxLength, fieldList) = vector.findOrCreateField(polyLayer,
-                polyLayer.pendingFields(), lengthFieldName)
+                                                          polyLayer.pendingFields(), lengthFieldName)
         (idxCount, fieldList) = vector.findOrCreateField(polyLayer, fieldList,
-                countFieldName)
+                                                         countFieldName)
 
         writer = self.getOutputFromName(self.OUTPUT).getVectorWriter(
             fieldList.toList(), polyProvider.geometryType(), polyProvider.crs())
@@ -81,11 +81,10 @@ class SumLines(GeoAlgorithm):
         outGeom = QgsGeometry()
         distArea = QgsDistanceArea()
 
-        current = 0
         features = vector.features(polyLayer)
-        total = 100.0 / float(len(features))
+        total = 100.0 / len(features)
         hasIntersections = False
-        for ftPoly in features:
+        for current, ftPoly in enumerate(features):
             inGeom = QgsGeometry(ftPoly.geometry())
             attrs = ftPoly.attributes()
             count = 0
@@ -117,7 +116,6 @@ class SumLines(GeoAlgorithm):
             outFeat.setAttributes(attrs)
             writer.addFeature(outFeat)
 
-            current += 1
             progress.setPercentage(int(current * total))
 
         del writer

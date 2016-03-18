@@ -84,7 +84,7 @@ Also, the directory tests/ contains several examples of well-formed "Execute" re
     - The files PMLExecuteRequest*.xml contain requests that can be submitted to the live PML WPS service.
 
 """
-import codecs
+import codecs, urllib2
 
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
@@ -668,37 +668,38 @@ class WPSExecution():
         filepath: optional path to the output file, otherwise a file will be created in the local directory with the name assigned by the server, 
                   or default name 'wps.out' for embedded output.
         """
-        
         if self.isSucceded():
             content = ''
             for output in self.processOutputs:
                 if output.identifier != identifier:
                     continue
-
+                    
                 # ExecuteResponse contains reference to server-side output
                 if output.reference is not None:
                     # a) 'http://cida.usgs.gov/climate/gdp/process/RetrieveResultServlet?id=1318528582026OUTPUT.601bb3d0-547f-4eab-8642-7c7d2834459e'
                     # b) 'http://rsg.pml.ac.uk/wps/wpsoutputs/outputImage-11294Bd6l2a.tif'
                     url = output.reference
-                    print 'Output URL=%s' % url
+                    
                     if '?' in url:
-                        spliturl=url.split('?')
+                        spliturl = url.split('?')
+                        if (url.startswith('http://localhost') or url.startswith('https://localhost')):
+                            owsUrl = self.url.replace('/wps', '/ows')
+                            spliturl[0] = owsUrl
+                            
                         u = openURL(spliturl[0], spliturl[1], method='Get', username = self.username, password = self.password)
+                        # u = urllib2.urlopen(url)
                         # extract output filepath from URL query string
                         if filepath is None:
                             filepath = spliturl[1].split('=')[1]
                     else:
                         u = openURL(url, '', method='Get', username = self.username, password = self.password)
+                        # u = urllib2.urlopen(url)
                         # extract output filepath from base URL
                         if filepath is None:
                             filepath = url.split('/')[-1]
 
                     # write out content
-                    # 1. read all
-                    #content = content + u.read()
-
                     # 2. read large files
-                    #QMessageBox.information(iface.mainWindow(), 'Information', 'Starting download')
                     CHUNK = 1024 * 4
                     with open(filepath, 'wb') as writer:
                         while True:
@@ -706,8 +707,8 @@ class WPSExecution():
                             if not chunk: break
                             writer.write(chunk)
                  
-                # ExecuteResponse contain embedded output   
-                if len(output.data)>0:
+                # ExecuteResponse contain embedded output
+                if len(output.data) > 0:
                     QMessageBox.information(iface.mainWindow(), 'Information', 'ExecuteResponse contain embedded output')
                     if filepath is None:
                         filepath = 'wps.out'
@@ -778,6 +779,7 @@ class WPSExecution():
         """
 
         self.request = request
+        ProcessingLog.addToLog(ProcessingLog.LOG_ALGORITHM, request)
         reader = WPSExecuteReader(verbose=self.verbose)
         response = reader.readFromUrl(self.url, request, method='Post', username=self.username, password=self.password)
         self.response = response

@@ -40,6 +40,7 @@ SAGA_LOG_CONSOLE = 'SAGA_LOG_CONSOLE'
 SAGA_FOLDER = 'SAGA_FOLDER'
 SAGA_IMPORT_EXPORT_OPTIMIZATION = 'SAGA_IMPORT_EXPORT_OPTIMIZATION'
 
+
 def sagaBatchJobFilename():
     if isWindows():
         filename = 'saga_batch_job.bat'
@@ -67,6 +68,7 @@ def findSagaFolder():
             folder = testfolder
     return folder
 
+
 def sagaPath():
     folder = ProcessingConfig.getSetting(SAGA_FOLDER)
     if folder is None or folder == '':
@@ -74,6 +76,7 @@ def sagaPath():
         if folder is not None:
             ProcessingConfig.setSettingValue(SAGA_FOLDER, folder)
     return folder or ''
+
 
 def sagaDescriptionPath():
     return os.path.join(os.path.dirname(__file__), 'description')
@@ -86,7 +89,7 @@ def createSagaBatchJobFileFromSagaCommands(commands):
         fout.write('set SAGA=' + sagaPath() + '\n')
         fout.write('set SAGA_MLB=' + sagaPath() + os.sep
                    + 'modules' + '\n')
-        fout.write('PATH=PATH;%SAGA%;%SAGA_MLB%\n')
+        fout.write('PATH=%PATH%;%SAGA%;%SAGA_MLB%\n')
     elif isMac():
         fout.write('export SAGA_MLB=' + sagaPath()
                    + '/../lib/saga\n')
@@ -101,6 +104,7 @@ def createSagaBatchJobFileFromSagaCommands(commands):
 
 _installedVersion = None
 _installedVersionFound = False
+
 
 def getSagaInstalledVersion(runSaga=False):
     global _installedVersion

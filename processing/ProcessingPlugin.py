@@ -47,6 +47,7 @@ cmd_folder = os.path.split(inspect.getfile(inspect.currentframe()))[0]
 if cmd_folder not in sys.path:
     sys.path.insert(0, cmd_folder)
 
+
 class ProcessingPlugin:
 
     def __init__(self, iface):
@@ -70,6 +71,7 @@ class ProcessingPlugin:
         self.toolboxAction.setIcon(
             QIcon(os.path.join(cmd_folder, 'images', 'alg.png')))
         self.toolboxAction.setText(self.tr('&Toolbox'))
+        self.iface.registerMainWindowAction(self.toolboxAction, 'Ctrl+Alt+T')
         self.menu.addAction(self.toolboxAction)
 
         self.modelerAction = QAction(
@@ -77,6 +79,7 @@ class ProcessingPlugin:
             self.tr('Graphical &Modeler...'), self.iface.mainWindow())
         self.modelerAction.setObjectName('modelerAction')
         self.modelerAction.triggered.connect(self.openModeler)
+        self.iface.registerMainWindowAction(self.modelerAction, 'Ctrl+Alt+M')
         self.menu.addAction(self.modelerAction)
 
         self.historyAction = QAction(
@@ -84,6 +87,7 @@ class ProcessingPlugin:
             self.tr('&History...'), self.iface.mainWindow())
         self.historyAction.setObjectName('historyAction')
         self.historyAction.triggered.connect(self.openHistory)
+        self.iface.registerMainWindowAction(self.historyAction, 'Ctrl+Alt+H')
         self.menu.addAction(self.historyAction)
 
         self.configAction = QAction(
@@ -91,6 +95,7 @@ class ProcessingPlugin:
             self.tr('&Options...'), self.iface.mainWindow())
         self.configAction.setObjectName('configAction')
         self.configAction.triggered.connect(self.openConfig)
+        self.iface.registerMainWindowAction(self.configAction, 'Ctrl+Alt+C')
         self.menu.addAction(self.configAction)
 
         self.resultsAction = QAction(
@@ -98,6 +103,7 @@ class ProcessingPlugin:
             self.tr('&Results Viewer...'), self.iface.mainWindow())
         self.resultsAction.setObjectName('resultsAction')
         self.resultsAction.triggered.connect(self.openResults)
+        self.iface.registerMainWindowAction(self.resultsAction, 'Ctrl+Alt+R')
         self.menu.addAction(self.resultsAction)
 
         menuBar = self.iface.mainWindow().menuBar()
@@ -111,7 +117,7 @@ class ProcessingPlugin:
         self.commanderAction.triggered.connect(self.openCommander)
         self.menu.addAction(self.commanderAction)
         self.iface.registerMainWindowAction(self.commanderAction,
-            self.tr('Ctrl+Alt+M'))
+                                            self.tr('Ctrl+Alt+M'))
 
     def unload(self):
         self.toolbox.setVisible(False)
@@ -122,6 +128,11 @@ class ProcessingPlugin:
         if QDir(folder).exists():
             shutil.rmtree(folder, True)
 
+        self.iface.unregisterMainWindowAction(self.toolboxAction)
+        self.iface.unregisterMainWindowAction(self.modelerAction)
+        self.iface.unregisterMainWindowAction(self.historyAction)
+        self.iface.unregisterMainWindowAction(self.configAction)
+        self.iface.unregisterMainWindowAction(self.resultsAction)
         self.iface.unregisterMainWindowAction(self.commanderAction)
 
     def openCommander(self):
@@ -143,7 +154,6 @@ class ProcessingPlugin:
         dlg = ModelerDialog()
         dlg.exec_()
         if dlg.update:
-            Processing.updateAlgsList()
             self.toolbox.updateProvider('model')
 
     def openResults(self):

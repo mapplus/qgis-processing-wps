@@ -37,6 +37,7 @@ from .fieldsmapping import ParameterFieldsMapping
 from .ui.FieldsMapperDialogs import (FieldsMapperParametersDialog,
                                      FieldsMapperModelerParametersDialog)
 
+
 class FieldsMapper(GeoAlgorithm):
 
     INPUT_LAYER = 'INPUT_LAYER'
@@ -48,21 +49,15 @@ class FieldsMapper(GeoAlgorithm):
         self.mapping = None
 
     def defineCharacteristics(self):
-        self.name = 'Refactor fields'
-        self.group = 'Vector table tools'
+        self.name, self.i18n_name = self.trAlgorithm('Refactor fields')
+        self.group, self.i18n_group = self.trAlgorithm('Vector table tools')
         self.addParameter(ParameterVector(self.INPUT_LAYER,
-            self.tr('Input layer'),
-            [ParameterVector.VECTOR_TYPE_ANY], False))
+                                          self.tr('Input layer'),
+                                          [ParameterVector.VECTOR_TYPE_ANY], False))
         self.addParameter(ParameterFieldsMapping(self.FIELDS_MAPPING,
-            self.tr('Fields mapping'), self.INPUT_LAYER))
+                                                 self.tr('Fields mapping'), self.INPUT_LAYER))
         self.addOutput(OutputVector(self.OUTPUT_LAYER,
-            self.tr('Refactored')))
-
-    def getCustomParametersDialog(self):
-        return FieldsMapperParametersDialog(self)
-
-    def getCustomModelerParametersDialog(self, modelAlg, algIndex=None):
-        return FieldsMapperModelerParametersDialog(self, modelAlg, algIndex)
+                                    self.tr('Refactored')))
 
     def processAlgorithm(self, progress):
         layer = self.getParameterValue(self.INPUT_LAYER)
@@ -103,7 +98,7 @@ class FieldsMapper(GeoAlgorithm):
         inFeat = QgsFeature()
         outFeat = QgsFeature()
         features = vector.features(layer)
-        count = len(features)
+        total = 100.0 / len(features)
         for current, inFeat in enumerate(features):
             rownum = current + 1
 
@@ -125,8 +120,7 @@ class FieldsMapper(GeoAlgorithm):
 
             writer.addFeature(outFeat)
 
-            current += 1
-            progress.setPercentage(100 * current / float(count))
+            progress.setPercentage(int(current * total))
 
         del writer
 
@@ -134,3 +128,9 @@ class FieldsMapper(GeoAlgorithm):
             raise GeoAlgorithmExecutionException(
                 self.tr('An error occurred while evaluating the calculation'
                         ' string:\n') + error)
+
+    def getCustomParametersDialog(self):
+        return FieldsMapperParametersDialog(self)
+
+    def getCustomModelerParametersDialog(self, modelAlg, algName=None):
+        return FieldsMapperModelerParametersDialog(self, modelAlg, algName)

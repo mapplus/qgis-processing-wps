@@ -41,17 +41,17 @@ class DensifyGeometries(GeoAlgorithm):
     OUTPUT = 'OUTPUT'
 
     def defineCharacteristics(self):
-        self.name = 'Densify geometries'
-        self.group = 'Vector geometry tools'
+        self.name, self.i18n_name = self.trAlgorithm('Densify geometries')
+        self.group, self.i18n_group = self.trAlgorithm('Vector geometry tools')
 
         self.addParameter(ParameterVector(self.INPUT,
-            self.tr('Input layer'),
-            [ParameterVector.VECTOR_TYPE_POLYGON, ParameterVector.VECTOR_TYPE_LINE]))
+                                          self.tr('Input layer'),
+                                          [ParameterVector.VECTOR_TYPE_POLYGON, ParameterVector.VECTOR_TYPE_LINE]))
         self.addParameter(ParameterNumber(self.VERTICES,
-            self.tr('Vertices to add'), 1, 10000000, 1))
+                                          self.tr('Vertices to add'), 1, 10000000, 1))
 
         self.addOutput(OutputVector(self.OUTPUT,
-            self.tr('Densified')))
+                                    self.tr('Densified')))
 
     def processAlgorithm(self, progress):
         layer = dataobjects.getObjectFromUri(
@@ -65,18 +65,16 @@ class DensifyGeometries(GeoAlgorithm):
                                          layer.wkbType(), layer.crs())
 
         features = vector.features(layer)
-        total = 100.0 / float(len(features))
-        current = 0
-        for f in features:
+        total = 100.0 / len(features)
+        for current, f in enumerate(features):
             featGeometry = QgsGeometry(f.geometry())
             attrs = f.attributes()
             newGeometry = self.densifyGeometry(featGeometry, int(vertices),
-                    isPolygon)
+                                               isPolygon)
             feature = QgsFeature()
             feature.setGeometry(newGeometry)
             feature.setAttributes(attrs)
             writer.addFeature(feature)
-            current += 1
             progress.setPercentage(int(current * total))
 
         del writer

@@ -87,7 +87,7 @@ class Grass7AlgorithmProvider(AlgorithmProvider):
                         ProcessingLog.addToLog(
                             ProcessingLog.LOG_ERROR,
                             self.tr('Could not open GRASS GIS 7 algorithm: %s' % descriptionFile))
-                except Exception, e:
+                except Exception as e:
                     ProcessingLog.addToLog(
                         ProcessingLog.LOG_ERROR,
                         self.tr('Could not open GRASS GIS 7 algorithm: %s' % descriptionFile))
@@ -110,3 +110,6 @@ class Grass7AlgorithmProvider(AlgorithmProvider):
 
     def getSupportedOutputRasterLayerExtensions(self):
         return ['tif']
+
+    def canBeActivated(self):
+        return not bool(Grass7Utils.checkGrass7IsInstalled())

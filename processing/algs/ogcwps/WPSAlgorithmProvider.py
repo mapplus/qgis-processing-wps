@@ -130,7 +130,7 @@ class WPSAlgorithmProvider(AlgorithmProvider):
         
         self.actions = []
         self.actions.append(WPSServerManagerAction(u'WPS 서버 설정', self))
-        #self.actions.append(WPSCustomAction(u'시계열 다차원 레이어 생성', WPSCustomAction.MDA))
+        # self.actions.append(WPSCustomAction(u'시계열 다차원 레이어 생성', WPSCustomAction.MDA))
         
         for alg in self.alglist:
             alg.provider = self

@@ -79,12 +79,10 @@ class CreateMDADatasetDialog(QtGui.QDialog, FORM_CLASS):
 
     def GetFileList(self):
         listFile = os.path.join(os.path.dirname(__file__),'index_metadata', 'index.xml')
-        #listFile = QFileDialog.getOpenFileName(None, "Add a List File", "", "xml Files (*.xml)")
-        if listFile:
-            if os.path.exists(listFile):
-                self.AddFileList(listFile)
-            else:
-                QMessageBox.information(self, "Information", u"Check File!")
+        if os.path.exists(listFile):
+            self.AddFileList(listFile)
+        else:
+            QMessageBox.information(self, "Information", u"Check File!")
 
     def AddFileList(self, listFile):
         tblistWiget = self.tbItem
@@ -100,7 +98,6 @@ class CreateMDADatasetDialog(QtGui.QDialog, FORM_CLASS):
     
         #xml columns 생성
         headerNames = [u'지표이름', u'공간단위', u'시간범위', u'지표유형', u'지표코드', u'코드']
-        #headerNames = [u'지표이름', u'지표코드', u'코드', u'지표유형', u'공간단위', u'시간범위']
         tblistWiget.setColumnCount(len(headerNames))
         tblistWiget.setHorizontalHeaderLabels(headerNames)
 
@@ -171,13 +168,11 @@ class CreateMDADatasetDialog(QtGui.QDialog, FORM_CLASS):
             tbselListWidget.removeRow(row)
 
     def GetSidoFileList(self):
-        #listSidFile = QFileDialog.getOpenFileName(None, "Add a List File", "", "xml Files (*.xml)")
         listSidFile = os.path.join(os.path.dirname(__file__),'index_metadata', 'region.xml')
-        if listSidFile:
-            if os.path.exists(listSidFile):
-                self.AddSidFileList(listSidFile)
-            else:
-                QMessageBox.information(self, "Information", u"Check File!")
+        if os.path.exists(listSidFile):
+            self.AddSidFileList(listSidFile)
+        else:
+            QMessageBox.information(self, "Information", u"Check File!")
         
     def AddSidFileList(self, listSidFile):
         tbSidListWidget = self.tbSid
@@ -220,7 +215,7 @@ class CreateMDADatasetDialog(QtGui.QDialog, FORM_CLASS):
     def CreateMDADataset(self):
         customArea = u"" #시도 및 시군구 코드 목록
         mapLevel = u"" #시도, 시군구, 읍면동
-        period = u"" #1985~2000
+        period = u"" #1985~2010
         factorList = u"" #지표 코드
     
         #선택지표 Table
@@ -298,7 +293,7 @@ class CreateMDADatasetDialog(QtGui.QDialog, FORM_CLASS):
             QApplication.setOverrideCursor(QCursor(Qt.WaitCursor))
 
             # run process
-            wps = WebProcessingService(WPSUtils.getWPSURL(), verbose=False, skip_caps=True)
+            wps = WebProcessingService("http://geeps.krihs.re.kr/gxt/wps", verbose=False, skip_caps=True)
             execution = wps.execute('kopss:KM_CreateMDADataset', data_inputs, process_outputs)
 
             while execution.isComplete()==False:

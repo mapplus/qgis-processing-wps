@@ -43,13 +43,13 @@ class LinesIntersection(GeoAlgorithm):
     OUTPUT = 'OUTPUT'
 
     def defineCharacteristics(self):
-        self.name = 'Line intersections'
-        self.group = 'Vector overlay tools'
+        self.name, self.i18n_name = self.trAlgorithm('Line intersections')
+        self.group, self.i18n_group = self.trAlgorithm('Vector overlay tools')
 
         self.addParameter(ParameterVector(self.INPUT_A,
-            self.tr('Input layer'), [ParameterVector.VECTOR_TYPE_LINE]))
+                                          self.tr('Input layer'), [ParameterVector.VECTOR_TYPE_LINE]))
         self.addParameter(ParameterVector(self.INPUT_B,
-            self.tr('Intersect layer'), [ParameterVector.VECTOR_TYPE_LINE]))
+                                          self.tr('Intersect layer'), [ParameterVector.VECTOR_TYPE_LINE]))
         self.addParameter(ParameterTableField(
             self.FIELD_A,
             self.tr('Input unique ID field'),
@@ -76,23 +76,16 @@ class LinesIntersection(GeoAlgorithm):
                      layerB.pendingFields()[idxB]]
 
         writer = self.getOutputFromName(self.OUTPUT).getVectorWriter(fieldList,
-                QGis.WKBPoint, layerA.dataProvider().crs())
+                                                                     QGis.WKBPoint, layerA.dataProvider().crs())
 
         spatialIndex = vector.spatialindex(layerB)
 
-        inFeatA = QgsFeature()
-        inFeatB = QgsFeature()
         outFeat = QgsFeature()
-        inGeom = QgsGeometry()
-        tmpGeom = QgsGeometry()
-
         features = vector.features(layerA)
-
-        current = 0
-        total = 100.0 / float(len(features))
+        total = 100.0 / len(features)
         hasIntersections = False
 
-        for inFeatA in features:
+        for current, inFeatA in enumerate(features):
             inGeom = inFeatA.geometry()
             hasIntersections = False
             lines = spatialIndex.intersects(inGeom.boundingBox())
@@ -121,10 +114,9 @@ class LinesIntersection(GeoAlgorithm):
                             for j in points:
                                 outFeat.setGeometry(tempGeom.fromPoint(j))
                                 outFeat.setAttributes([attrsA[idxA],
-                                        attrsB[idxB]])
+                                                       attrsB[idxB]])
                                 writer.addFeature(outFeat)
 
-            current += 1
             progress.setPercentage(int(current * total))
 
         del writer

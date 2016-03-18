@@ -31,6 +31,7 @@ from PyQt4.QtCore import Qt, QCoreApplication
 from PyQt4.QtGui import QApplication, QCursor
 
 from qgis.utils import iface
+from qgis.core import QgsMessageLog
 
 import processing
 from processing.gui import AlgorithmClassification
@@ -106,8 +107,8 @@ class Processing:
         try:
             provider.unload()
             Processing.providers.remove(provider)
-            ProcessingConfig.readSettings()
-            Processing.updateAlgsList()
+            del Processing.algs[provider.getName()]
+            Processing.fireAlgsListHasChanged()
         except:
             # This try catch block is here to avoid problems if the
             # plugin with a provider is unloaded after the Processing
@@ -122,7 +123,6 @@ class Processing:
             if provider.getName() == name:
                 return provider
         return Processing.modeler
-
 
     @staticmethod
     def initialize():
@@ -139,19 +139,15 @@ class Processing:
         Processing.addProvider(ScriptAlgorithmProvider(), updateList=False)
         Processing.addProvider(TauDEMAlgorithmProvider(), updateList=False)
         Processing.addProvider(Processing.modeler, updateList=False)
-        # New WPS Algorithms
-        Processing.addProvider(WPSAlgorithmProvider(), updateList=False)
+        Processing.addProvider(WPSAlgorithmProvider(), updateList=False) # WPS Services
         Processing.modeler.initializeSettings()
 
         # And initialize
         AlgorithmClassification.loadClassification()
-        AlgorithmClassification.loadDisplayNames()
-        ProcessingLog.startLogging()
         ProcessingConfig.initialize()
         ProcessingConfig.readSettings()
         RenderingStyles.loadStyles()
         Processing.loadFromProviders()
-
         # Inform registered listeners that all providers' algorithms have been loaded
         Processing.fireAlgsListHasChanged()
 
@@ -161,8 +157,10 @@ class Processing:
         requires the list of algorithms to be created again from
         algorithm providers.
         """
+        QApplication.setOverrideCursor(QCursor(Qt.WaitCursor))
         Processing.loadFromProviders()
         Processing.fireAlgsListHasChanged()
+        QApplication.restoreOverrideCursor()
 
     @staticmethod
     def loadFromProviders():
@@ -224,7 +222,6 @@ class Processing:
             algs[alg.commandLineName()] = alg
         Processing.algs[Processing.modeler.getName()] = algs
 
-
     @staticmethod
     def loadActions():
         for provider in Processing.providers:
@@ -269,13 +266,14 @@ class Processing:
         Processing.runAlgorithm(name, handleAlgorithmResults, *args)
 
     @staticmethod
-    def runAlgorithm(algOrName, onFinish, *args):
+    def runAlgorithm(algOrName, onFinish, *args, **kwargs):
         if isinstance(algOrName, GeoAlgorithm):
             alg = algOrName
         else:
             alg = Processing.getAlgorithm(algOrName)
         if alg is None:
             print 'Error: Algorithm not found\n'
+            QgsMessageLog.logMessage(Processing.tr('Error: Algorithm {0} not found\n').format(algOrName), Processing.tr("Processing"))
             return
         alg = alg.getCopy()
 
@@ -292,26 +290,29 @@ class Processing:
                 if output and output.setValue(value):
                     continue
                 print 'Error: Wrong parameter value %s for parameter %s.' % (value, name)
+                QgsMessageLog.logMessage(Processing.tr('Error: Wrong parameter value {0} for parameter {1}.').format(value, name), Processing.tr("Processing"))
                 ProcessingLog.addToLog(
                     ProcessingLog.LOG_ERROR,
                     Processing.tr('Error in %s. Wrong parameter value %s for parameter %s.') % (
-                        alg.name, value, name )
+                        alg.name, value, name)
                 )
                 return
             # fill any missing parameters with default values if allowed
             for param in alg.parameters:
                 if param.name not in setParams:
-                    if not param.setValue(None):
+                    if not param.setDefaultValue():
                         print ('Error: Missing parameter value for parameter %s.' % (param.name))
+                        QgsMessageLog.logMessage(Processing.tr('Error: Missing parameter value for parameter {0}.').format(param.name), Processing.tr("Processing"))
                         ProcessingLog.addToLog(
                             ProcessingLog.LOG_ERROR,
                             Processing.tr('Error in %s. Missing parameter value for parameter %s.') % (
-                                alg.name, param.name )
+                                alg.name, param.name)
                         )
                         return
         else:
             if len(args) != alg.getVisibleParametersCount() + alg.getVisibleOutputsCount():
                 print 'Error: Wrong number of parameters'
+                QgsMessageLog.logMessage(Processing.tr('Error: Wrong number of parameters'), Processing.tr("Processing"))
                 processing.alghelp(algOrName)
                 return
             i = 0
@@ -320,6 +321,7 @@ class Processing:
                     if not param.setValue(args[i]):
                         print 'Error: Wrong parameter value: ' \
                             + unicode(args[i])
+                        QgsMessageLog.logMessage(Processing.tr('Error: Wrong parameter value: ') + unicode(args[i]), Processing.tr("Processing"))
                         return
                     i = i + 1
 
@@ -327,41 +329,50 @@ class Processing:
                 if not output.hidden:
                     if not output.setValue(args[i]):
                         print 'Error: Wrong output value: ' + unicode(args[i])
+                        QgsMessageLog.logMessage(Processing.tr('Error: Wrong output value: ') + unicode(args[i]), Processing.tr("Processing"))
                         return
                     i = i + 1
 
         msg = alg._checkParameterValuesBeforeExecuting()
         if msg:
-            print 'Unable to execute algorithm\n' + msg
+            print 'Unable to execute algorithm\n' + unicode(msg)
+            QgsMessageLog.logMessage(Processing.tr('Unable to execute algorithm\n{0}').format(msg), Processing.tr("Processing"))
             return
 
         if not alg.checkInputCRS():
             print 'Warning: Not all input layers use the same CRS.\n' \
                 + 'This can cause unexpected results.'
+            QgsMessageLog.logMessage(Processing.tr('Warning: Not all input layers use the same CRS.\nThis can cause unexpected results.'), Processing.tr("Processing"))
 
+        # Don't set the wait cursor twice, because then when you
+        # restore it, it will still be a wait cursor.
+        overrideCursor = False
         if iface is not None:
-          # Don't set the wait cursor twice, because then when you
-          # restore it, it will still be a wait cursor.
-          cursor = QApplication.overrideCursor()
-          if cursor is None or cursor == 0:
-              QApplication.setOverrideCursor(QCursor(Qt.WaitCursor))
-          elif cursor.shape() != Qt.WaitCursor:
-              QApplication.setOverrideCursor(QCursor(Qt.WaitCursor))
+            cursor = QApplication.overrideCursor()
+            if cursor is None or cursor == 0:
+                QApplication.setOverrideCursor(QCursor(Qt.WaitCursor))
+                overrideCursor = True
+            elif cursor.shape() != Qt.WaitCursor:
+                QApplication.setOverrideCursor(QCursor(Qt.WaitCursor))
+                overrideCursor = True
 
         progress = None
-        if iface is not None :
-            progress = MessageBarProgress(alg.name)
+        if kwargs is not None and "progress" in kwargs.keys():
+            progress = kwargs["progress"]
+        elif iface is not None:
+            progress = MessageBarProgress()
+
         ret = runalg(alg, progress)
         if ret:
             if onFinish is not None:
                 onFinish(alg, progress)
         else:
-            print ("There were errors executing the algorithm.\n"
-                    "Check the QGIS log to get more information")
+            QgsMessageLog.logMessage(Processing.tr("There were errors executing the algorithm."), Processing.tr("Processing"))
 
-        if iface is not None:
-          QApplication.restoreOverrideCursor()
-          progress.close()
+        if overrideCursor:
+            QApplication.restoreOverrideCursor()
+        if isinstance(progress, MessageBarProgress):
+            progress.close()
         return alg
 
     @staticmethod

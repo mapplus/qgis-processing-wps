@@ -62,7 +62,7 @@ class FixedTableDialog(BASE, WIDGET):
         self.btnRemove.clicked.connect(lambda: self.removeRows())
         self.btnRemoveAll.clicked.connect(lambda: self.removeRows(True))
 
-        if not self.param.fixedNumOfRows:
+        if self.param.fixedNumOfRows:
             self.btnAdd.setEnabled(False)
             self.btnRemove.setEnabled(False)
             self.btnRemoveAll.setEnabled(False)
@@ -102,8 +102,7 @@ class FixedTableDialog(BASE, WIDGET):
             self.tblView.model().clear()
             self.tblView.model().setHorizontalHeaderLabels(self.param.cols)
         else:
-            indexes = self.tblView.selectionModel().selectedRows()
-            indexes.sort()
+            indexes = sorted(self.tblView.selectionModel().selectedRows())
             self.tblView.setUpdatesEnabled(False)
             for i in reversed(indexes):
                 self.tblView.model().removeRows(i.row(), 1)

@@ -44,13 +44,13 @@ class CheckValidity(GeoAlgorithm):
     INVALID_OUTPUT = 'INVALID_OUTPUT'
     ERROR_OUTPUT = 'ERROR_OUTPUT'
 
-    METHODS = ['The one selected in digitizing settings',
-               'QGIS',
-               'GEOS']
-
     def defineCharacteristics(self):
-        self.name = 'Check validity'
-        self.group = 'Vector geometry tools'
+        self.name, self.i18n_name = self.trAlgorithm('Check validity')
+        self.group, self.i18n_group = self.trAlgorithm('Vector geometry tools')
+
+        self.methods = [self.tr('The one selected in digitizing settings'),
+                        'QGIS',
+                        'GEOS']
 
         self.addParameter(ParameterVector(
             self.INPUT_LAYER,
@@ -60,7 +60,7 @@ class CheckValidity(GeoAlgorithm):
         self.addParameter(ParameterSelection(
             self.METHOD,
             self.tr('Method'),
-            self.METHODS))
+            self.methods))
 
         self.addOutput(OutputVector(
             self.VALID_OUTPUT,
@@ -125,7 +125,7 @@ class CheckValidity(GeoAlgorithm):
         error_count = 0
 
         features = vector.features(layer)
-        count = len(features)
+        total = 100.0 / len(features)
         for current, inFeat in enumerate(features):
             geom = QgsGeometry(inFeat.geometry())
             attrs = inFeat.attributes()
@@ -166,7 +166,7 @@ class CheckValidity(GeoAlgorithm):
                 invalid_writer.addFeature(outFeat)
                 invalid_count += 1
 
-            progress.setPercentage(100 * current / float(count))
+            progress.setPercentage(int(current * total))
 
         del valid_writer
         del invalid_writer

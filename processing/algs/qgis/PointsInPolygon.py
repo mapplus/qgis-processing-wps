@@ -42,14 +42,14 @@ class PointsInPolygon(GeoAlgorithm):
     FIELD = 'FIELD'
 
     def defineCharacteristics(self):
-        self.name = 'Count points in polygon'
-        self.group = 'Vector analysis tools'
+        self.name, self.i18n_name = self.trAlgorithm('Count points in polygon')
+        self.group, self.i18n_group = self.trAlgorithm('Vector analysis tools')
         self.addParameter(ParameterVector(self.POLYGONS,
-            self.tr('Polygons'), [ParameterVector.VECTOR_TYPE_POLYGON]))
+                                          self.tr('Polygons'), [ParameterVector.VECTOR_TYPE_POLYGON]))
         self.addParameter(ParameterVector(self.POINTS,
-            self.tr('Points'), [ParameterVector.VECTOR_TYPE_POINT]))
+                                          self.tr('Points'), [ParameterVector.VECTOR_TYPE_POINT]))
         self.addParameter(ParameterString(self.FIELD,
-            self.tr('Count field name'), 'NUMPOINTS'))
+                                          self.tr('Count field name'), 'NUMPOINTS'))
 
         self.addOutput(OutputVector(self.OUTPUT, self.tr('Count')))
 
@@ -63,7 +63,7 @@ class PointsInPolygon(GeoAlgorithm):
         fields.append(QgsField(fieldName, QVariant.Int))
 
         (idxCount, fieldList) = vector.findOrCreateField(polyLayer,
-                polyLayer.pendingFields(), fieldName)
+                                                         polyLayer.pendingFields(), fieldName)
 
         writer = self.getOutputFromName(self.OUTPUT).getVectorWriter(
             fields.toList(), polyProvider.geometryType(), polyProvider.crs())
@@ -75,27 +75,24 @@ class PointsInPolygon(GeoAlgorithm):
         outFeat = QgsFeature()
         geom = QgsGeometry()
 
-        current = 0
-        hasIntersections = False
-
         features = vector.features(polyLayer)
-        total = 100.0 / float(len(features))
-        for ftPoly in features:
+        total = 100.0 / len(features)
+        for current, ftPoly in enumerate(features):
             geom = ftPoly.geometry()
+            engine = QgsGeometry.createGeometryEngine(geom.geometry())
+            engine.prepareGeometry()
+
             attrs = ftPoly.attributes()
 
             count = 0
-            hasIntersections = False
             points = spatialIndex.intersects(geom.boundingBox())
             if len(points) > 0:
-                hasIntersections = True
-
-            if hasIntersections:
-                for i in points:
-                    request = QgsFeatureRequest().setFilterFid(i)
-                    ftPoint = pointLayer.getFeatures(request).next()
-                    tmpGeom = QgsGeometry(ftPoint.geometry())
-                    if geom.contains(tmpGeom):
+                request = QgsFeatureRequest().setFilterFids(points)
+                fit = pointLayer.getFeatures(request)
+                ftPoint = QgsFeature()
+                while fit.nextFeature(ftPoint):
+                    tmpGeom = ftPoint.geometry()
+                    if engine.contains(tmpGeom.geometry()):
                         count += 1
 
             outFeat.setGeometry(geom)
@@ -106,7 +103,6 @@ class PointsInPolygon(GeoAlgorithm):
             outFeat.setAttributes(attrs)
             writer.addFeature(outFeat)
 
-            current += 1
             progress.setPercentage(int(current * total))
 
         del writer

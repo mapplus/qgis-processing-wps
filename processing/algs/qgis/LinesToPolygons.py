@@ -39,11 +39,11 @@ class LinesToPolygons(GeoAlgorithm):
     OUTPUT = 'OUTPUT'
 
     def defineCharacteristics(self):
-        self.name = 'Lines to polygons'
-        self.group = 'Vector geometry tools'
+        self.name, self.i18n_name = self.trAlgorithm('Lines to polygons')
+        self.group, self.i18n_group = self.trAlgorithm('Vector geometry tools')
 
         self.addParameter(ParameterVector(self.INPUT,
-            self.tr('Input layer'), [ParameterVector.VECTOR_TYPE_LINE]))
+                                          self.tr('Input layer'), [ParameterVector.VECTOR_TYPE_LINE]))
         self.addOutput(OutputVector(self.OUTPUT, self.tr('Polygons from lines')))
 
     def processAlgorithm(self, progress):
@@ -54,11 +54,9 @@ class LinesToPolygons(GeoAlgorithm):
         )
 
         outFeat = QgsFeature()
-
-        current = 0
         features = vector.features(layer)
-        total = 100.0 / float(len(features))
-        for f in features:
+        total = 100.0 / len(features)
+        for current, f in enumerate(features):
             outGeomList = []
             if f.geometry().isMultipart():
                 outGeomList = f.geometry().asMultiPolyline()
@@ -72,7 +70,6 @@ class LinesToPolygons(GeoAlgorithm):
                 outFeat.setAttributes(attrs)
                 writer.addFeature(outFeat)
 
-            current += 1
             progress.setPercentage(int(current * total))
 
         del writer

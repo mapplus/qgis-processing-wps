@@ -28,7 +28,9 @@ __revision__ = '$Format:%H$'
 import os
 
 from PyQt4 import uic
+from PyQt4.QtCore import pyqtSignal
 
+from math import log10, floor
 from processing.gui.NumberInputDialog import NumberInputDialog
 
 pluginPath = os.path.split(os.path.dirname(__file__))[0]
@@ -38,6 +40,8 @@ WIDGET, BASE = uic.loadUiType(
 
 class NumberInputPanel(BASE, WIDGET):
 
+    hasChanged = pyqtSignal()
+
     def __init__(self, number, minimum, maximum, isInteger):
         super(NumberInputPanel, self).__init__(None)
         self.setupUi(self)
@@ -45,18 +49,34 @@ class NumberInputPanel(BASE, WIDGET):
         self.isInteger = isInteger
         if self.isInteger:
             self.spnValue.setDecimals(0)
-            if maximum:
-                self.spnValue.setMaximum(maximum)
-            else:
-                self.spnValue.setMaximum(99999999)
-            if minimum:
-                self.spnValue.setMinimum(minimum)
-            else:
-                self.spnValue.setMinimum(-99999999)
+        else:
+            #Guess reasonable step value
+            if (maximum == 0 or maximum) and (minimum == 0 or minimum):
+                self.spnValue.setSingleStep(self.calculateStep(minimum, maximum))
 
-        self.spnValue.setValue(float(number))
+        if maximum == 0 or maximum:
+            self.spnValue.setMaximum(maximum)
+        else:
+            self.spnValue.setMaximum(99999999)
+        if minimum == 0 or minimum:
+            self.spnValue.setMinimum(minimum)
+        else:
+            self.spnValue.setMinimum(-99999999)
+
+        #Set default value
+        if number == 0 or number:
+            self.spnValue.setValue(float(number))
+            self.spnValue.setClearValue(float(number))
+        elif minimum == 0 or minimum:
+            self.spnValue.setValue(float(minimum))
+            self.spnValue.setClearValue(float(minimum))
+        else:
+            self.spnValue.setValue(0)
+            self.spnValue.setClearValue(0)
 
         self.btnCalc.clicked.connect(self.showNumberInputDialog)
+
+        self.spnValue.valueChanged.connect(lambda: self.hasChanged.emit())
 
     def showNumberInputDialog(self):
         dlg = NumberInputDialog(self.isInteger)
@@ -66,3 +86,12 @@ class NumberInputPanel(BASE, WIDGET):
 
     def getValue(self):
         return self.spnValue.value()
+
+    def calculateStep(self, minimum, maximum):
+        valueRange = maximum - minimum
+        if valueRange <= 1.0:
+            step = valueRange / 10.0
+            # round to 1 significant figure
+            return round(step, -int(floor(log10(step))))
+        else:
+            return 1.0

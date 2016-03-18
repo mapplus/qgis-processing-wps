@@ -43,19 +43,21 @@ class ConvexHull(GeoAlgorithm):
     OUTPUT = 'OUTPUT'
     FIELD = 'FIELD'
     METHOD = 'METHOD'
-    METHODS = ['Create single minimum convex hull',
-               'Create convex hulls based on field']
 
     def defineCharacteristics(self):
-        self.name = 'Convex hull'
-        self.group = 'Vector geometry tools'
+        self.name, self.i18n_name = self.trAlgorithm('Convex hull')
+        self.group, self.i18n_group = self.trAlgorithm('Vector geometry tools')
+
+        self.methods = [self.tr('Create single minimum convex hull'),
+                        self.tr('Create convex hulls based on field')]
+
         self.addParameter(ParameterVector(self.INPUT,
-            self.tr('Input layer'), [ParameterVector.VECTOR_TYPE_ANY]))
+                                          self.tr('Input layer'), [ParameterVector.VECTOR_TYPE_ANY]))
         self.addParameter(ParameterTableField(self.FIELD,
-            self.tr('Field (optional, only used if creating convex hulls by classes)'),
-            self.INPUT, optional=True))
+                                              self.tr('Field (optional, only used if creating convex hulls by classes)'),
+                                              self.INPUT, optional=True))
         self.addParameter(ParameterSelection(self.METHOD,
-            self.tr('Method'), self.METHODS))
+                                             self.tr('Method'), self.methods))
         self.addOutput(OutputVector(self.OUTPUT, self.tr('Convex hull')))
 
     def processAlgorithm(self, progress):
@@ -83,7 +85,7 @@ class ConvexHull(GeoAlgorithm):
                   f,
                   QgsField('area', QVariant.Double, '', 20, 6),
                   QgsField('perim', QVariant.Double, '', 20, 6)
-                 ]
+                  ]
 
         writer = self.getOutputFromName(self.OUTPUT).getVectorWriter(
             fields, QGis.WKBPolygon, layer.dataProvider().crs())
@@ -92,13 +94,12 @@ class ConvexHull(GeoAlgorithm):
         inGeom = QgsGeometry()
         outGeom = QgsGeometry()
 
-        current = 0
-
         fid = 0
         val = None
         features = vector.features(layer)
         if useField:
             unique = layer.uniqueValues(index)
+            current = 0
             total = 100.0 / (len(features) * len(unique))
             for i in unique:
                 first = True
@@ -131,13 +132,12 @@ class ConvexHull(GeoAlgorithm):
                 fid += 1
         else:
             hull = []
-            total = 100.0 / float(layer.featureCount())
+            total = 100.0 / layer.featureCount()
             features = vector.features(layer)
-            for f in features:
+            for current, f in enumerate(features):
                 inGeom = QgsGeometry(f.geometry())
                 points = vector.extractPoints(inGeom)
                 hull.extend(points)
-                current += 1
                 progress.setPercentage(int(current * total))
 
             tmpGeom = QgsGeometry(outGeom.fromMultiPoint(hull))
