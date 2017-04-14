@@ -36,7 +36,7 @@ class WPSServerManagerAction(ToolboxAction):
 
     def __init__(self, actionName, provider):
         self.name = actionName
-        self.group = u'OGC WPS Server'
+        self.group = u'Manage WPS Server'
         self.provider = provider
 
     def getIcon(self):
