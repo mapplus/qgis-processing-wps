@@ -2,7 +2,7 @@
 
 #### How to use
 * Clone or download 
-* copy [processing-wps] to {user}\.qgis2\python\plugins folder
+* copy [processing-wps] to {user}\\.qgis2\python\plugins folder
 * restart QGIS
 
 ### Gallery
