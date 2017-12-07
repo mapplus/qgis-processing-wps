@@ -29,7 +29,10 @@ import os
 import sys
 import inspect
 import webbrowser
-
+from PyQt4.QtCore import *
+from PyQt4.QtGui import *
+from qgis.core import *
+import resources_rc
 
 try:
     from processing.core.Processing import Processing
@@ -45,6 +48,20 @@ class ProcessingWPSPlugin:
         self.iface = iface
         if processing_installed:
             self.provider = WPSAlgorithmProvider()
+            
+        # initialize plugin directory
+        self.plugin_dir = os.path.dirname(__file__)
+            
+        # initialize locale
+        locale = QSettings().value("locale/userLocale")[0:2]
+        locale_path = os.path.join(self.plugin_dir, "i18n", "wps_{}.qm".format(locale))
+
+        if os.path.exists(locale_path):
+            self.translator = QTranslator()
+            self.translator.load(locale_path)
+
+            if qVersion() > '4.3.3':
+                QCoreApplication.installTranslator(self.translator)
 
     def unload(self):
         if processing_installed:

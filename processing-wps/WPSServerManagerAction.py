@@ -35,8 +35,8 @@ from ServerManagerDialog import ServerManagerDialog
 class WPSServerManagerAction(ToolboxAction):
 
     def __init__(self, actionName, provider):
-        self.name = actionName
-        self.group = u'Manage WPS Server'
+        self.name, self.i18n_name = self.trAction(actionName, "WPS")
+        self.group, self.i18n_group = self.trAction("Manage WPS Server", "WPS")
         self.provider = provider
 
     def getIcon(self):

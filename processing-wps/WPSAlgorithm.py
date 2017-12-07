@@ -91,12 +91,11 @@ class WPSAlgorithm(GeoAlgorithm):
         return QIcon(os.path.dirname(__file__) + '/icons/wps.png')
 
     def getPostProcessingErrorMessage(self, wrongLayers):
-        html = '<p>Oooops! The following output layers could not be \
-                open</p><ul>\n'
+        html = '<p>Oooops! The following output layers could not be open</p><ul>\n'
         for layer in wrongLayers:
             html += '<li>' + layer.description \
-                + ': <font size=3 face="Courier New" color="#ff0000">' \
-                + layer.value + '</font></li>\n'
+                 + ': <font size=3 face="Courier New" color="#ff0000">' \
+                 + layer.value + '</font></li>\n'
         html += '</ul><p>The above files could not be opened, which probably \
                  indicates that they were not correctly produced by the \
                  executed algorithm</p>'

@@ -1,92 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="1.1" language="en">
+<!DOCTYPE TS>
+<TS version="2.0" language="en">
 <context>
-    <name>Form</name>
+    <name>ServerManagerDialog</name>
     <message>
-        <location filename="ui_openlayers_ovwidget.py" line="72"/>
-        <source>Form</source>
-        <translation>Form</translation>
+        <location filename="../ServerManagerDialog.py" line="74"/>
+        <source>Add</source>
+        <translation>Add</translation>
     </message>
     <message>
-        <location filename="ui_openlayers_ovwidget.py" line="73"/>
-        <source>Enable map</source>
-        <translation>Enable map</translation>
+        <location filename="../ServerManagerDialog.py" line="75"/>
+        <source>Modify</source>
+        <translation>Modify</translation>
     </message>
     <message>
-        <location filename="ui_openlayers_ovwidget.py" line="74"/>
-        <source>Add map</source>
-        <translation>Add map</translation>
+        <location filename="../ServerManagerDialog.py" line="76"/>
+        <source>Delete</source>
+        <translation>Delete</translation>
     </message>
     <message>
-        <location filename="ui_openlayers_ovwidget.py" line="75"/>
-        <source>Hide cross in map</source>
-        <translation>Hide cross in map</translation>
+        <location filename="../ServerManagerDialog.py" line="77"/>
+        <source>Ok</source>
+        <translation>Ok</translation>
     </message>
     <message>
-        <location filename="ui_openlayers_ovwidget.py" line="76"/>
-        <source>Refresh map</source>
-        <translation>Refresh map</translation>
+        <location filename="../ServerManagerDialog.py" line="78"/>
+        <source>Cancel</source>
+        <translation>Cancel</translation>
     </message>
     <message>
-        <location filename="ui_openlayers_ovwidget.py" line="77"/>
-        <source>Save this image</source>
-        <translation>Save this image</translation>
+        <location filename="../ServerManagerDialog.py" line="88"/>
+        <source>Name</source>
+        <translation>Name</translation>
     </message>
     <message>
-        <location filename="ui_openlayers_ovwidget.py" line="78"/>
-        <source>Copy rectangle (KML) of map to clipboard</source>
-        <translation>Copy rectangle (KML) of map to clipboard</translation>
+        <location filename="../ServerManagerDialog.py" line="89"/>
+        <source>URL</source>
+        <translation>URL</translation>
+    </message>
+    <message>
+        <location filename="../ServerManagerDialog.py" line="90"/>
+        <source>Version</source>
+        <translation>Version</translation>
+    </message>
+    <message>
+        <location filename="../ServerManagerDialog.py" line="91"/>
+        <source>Type</source>
+        <translation>Type</translation>
+    </message>
+    <message>
+        <location filename="../ServerManagerDialog.py" line="91"/>
+        <source>Information</source>
+        <translation>Information</translation>
+    </message>
+    <message>
+        <location filename="../ServerManagerDialog.py" line="91"/>
+        <source>Confirm</source>
+        <translation>Confirm</translation>
+    </message>
+    <message>
+        <location filename="../ServerManagerDialog.py" line="91"/>
+        <source>Are you sure want to delete selected server?</source>
+        <translation>Are you sure want to delete selected server?</translation>
+    </message>
+    <message>
+        <source>GeoServer</source>
+        <translation>GeoServer</translation>
+    </message>
+    <message>
+        <source>Others</source>
+        <translation>Others</translation>
+    </message>
+    <message>
+        <source>Server</source>
+        <translation>Server</translation>
+    </message>
+    <message>
+        <source>WPS Server</source>
+        <translation>WPS Server</translation>
     </message>
 </context>
 <context>
-    <name>OpenLayersOverviewWidget</name>
+    <name>WPS</name>
     <message>
-        <location filename="openlayers_ovwidget.py" line="235"/>
-        <source>Save image</source>
-        <translation>Save image</translation>
+        <location filename="../WPSAlgorithmProvider.py" line="74"/>
+        <source>WPS</source>
+        <translation>WPS</translation>
     </message>
     <message>
-        <location filename="openlayers_ovwidget.py" line="235"/>
-        <source>Image(*.jpg)</source>
-        <translation>Image(*.jpg)</translation>
+        <location filename="../WPSAlgorithmProvider.py" line="77"/>
+        <source>OGC WPS Services</source>
+        <translation>OGC WPS Services</translation>
     </message>
     <message>
-        <location filename="openlayers_ovwidget.py" line="248"/>
-        <source>OpenLayers Overview</source>
-        <translation>OpenLayers Overview</translation>
+        <location filename="../WPSAlgorithmProvider.py" line="66"/>
+        <source>Maximum Features for processing vector layer</source>
+        <translation>Maximum Features for processing vector layer</translation>
     </message>
     <message>
-        <location filename="openlayers_ovwidget.py" line="158"/>
-        <source>At least one layer in map canvas required</source>
-        <translation>At least one layer in map canvas required</translation>
+        <location filename="../WPSServerManagerAction.py" line="38"/>
+        <source>WPS Server Setting</source>
+        <translation>WPS Server Setting</translation>
     </message>
     <message>
-        <location filename="openlayers_ovwidget.py" line="248"/>
-        <source>Error loading page!</source>
-        <translation>Error loading page!</translation>
-    </message>
-    <message>
-        <location filename="openlayers_ovwidget.py" line="258"/>
-        <source>Loading %1...</source>
-        <translation>Loading %1...</translation>
-    </message>
-</context>
-<context>
-    <name>OpenlayersPlugin</name>
-    <message>
-        <location filename="openlayers_plugin.py" line="144"/>
-        <source>OpenLayers Overview</source>
-        <translation>OpenLayers Overview</translation>
-    </message>
-    <message>
-        <location filename="openlayers_plugin.py" line="154"/>
-        <source>Add %1 layer</source>
-        <translation>Add %1 layer</translation>
-    </message>
-    <message>
-        <location filename="openlayers_plugin.py" line="161"/>
-        <source>Could not set Google projection!</source>
-        <translation>Could not set Google projection!</translation>
+        <location filename="../WPSServerManagerAction.py" line="39"/>
+        <source>Manage WPS Server</source>
+        <translation>Manage WPS Server</translation>
     </message>
 </context>
 </TS>

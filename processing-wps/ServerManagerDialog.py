@@ -56,6 +56,24 @@ class ServerManagerDialog(QtGui.QDialog, FORM_CLASS):
         super(ServerManagerDialog, self).__init__(parent)
         
         self.setupUi(self)
+        
+        self.setWindowTitle(self.tr("WPS Server Setting", "WPS"))
+        self.btnAdd.setText(self.tr("Add"))
+        # self.btnModify.setText(self.tr("Modify"))
+        self.btnDelete.setText(self.tr("Delete"))
+        self.btnOk.setText(self.tr("Ok"))
+        self.btnCancel.setText(self.tr("Cancel"))
+        
+        self.grpWPS.setTitle(self.tr("WPS Server"))
+        self.grpList.setTitle(self.tr("Server"))
+        
+        self.lblName.setText(self.tr("Name"))
+        self.lblURL.setText(self.tr("URL"))
+        self.lblVersion.setText(self.tr("Version"))
+        self.lblType.setText(self.tr("Type"))
+        self.optGeneral.setText(self.tr("GeoServer"))
+        self.optKopss.setText(self.tr("Others"))
+        
         self.provider = provider
         self.server_dir = os.path.join(os.path.dirname(__file__), "wps_server")
         self.servers = []
@@ -68,16 +86,21 @@ class ServerManagerDialog(QtGui.QDialog, FORM_CLASS):
         QObject.connect(self.btnCancel, SIGNAL("clicked ()"), self.cancel)
         
         self.loadServer()
-    
+        
+    def tr(self, string, context=''):
+        if context == '':
+            context = 'ServerManagerDialog'
+        return QApplication.translate(context, string, None, QApplication.UnicodeUTF8)
+        
     def loadServer(self):
         # table
         tableWidget = self.tblServer
         
         # create header
-        headerNames = [u'Name', 
-                       u'URL', 
-                       u'Version', 
-                       u'Type']
+        headerNames = [self.tr("Name"), 
+                       self.tr("URL"), 
+                       self.tr("Version"), 
+                       self.tr("Type")]
         tableWidget.setColumnCount(len(headerNames))
         tableWidget.setHorizontalHeaderLabels(headerNames)
         
@@ -124,15 +147,15 @@ class ServerManagerDialog(QtGui.QDialog, FORM_CLASS):
         serverType = 'GeoServer' if self.optGeneral.isChecked() else 'Others'
         
         if (not serverName) or (serverName == ""):
-            QMessageBox.information(self, u"Information", u'Server name required!')
+            QMessageBox.information(self, self.tr('information'), u'Server name required!')
             return
         
         if (not serverURL) or (serverURL == ""):
-            QMessageBox.information(self, u"Information", u'Server URL required!')
+            QMessageBox.information(self, self.tr('information'), u'Server URL required!')
             return
         
         if (not version) or (version == ""):
-            QMessageBox.information(self, u"Information", u'Server version required!')
+            QMessageBox.information(self, self.tr('information'), u'Server version required!')
             return
         
         # check server status
@@ -143,7 +166,7 @@ class ServerManagerDialog(QtGui.QDialog, FORM_CLASS):
             serverInfo = WpsServerInfo(directory, serverName, serverURL, version=version, serverType=serverType)
             self.addServerItem(serverInfo)
         else:
-            QMessageBox.information(self, u"Information", u'Invalid server URL!')
+            QMessageBox.information(self, self.tr('information'), u'Invalid server URL!')
     
     def chekc_server_status(self, serverURL):
         wps = WebProcessingService(serverURL, verbose=False, skip_caps=True)
@@ -155,7 +178,7 @@ class ServerManagerDialog(QtGui.QDialog, FORM_CLASS):
         return False
 
     def modifyServer(self):
-        QMessageBox.information(self, u"Information", u"modifyServer")
+        QMessageBox.information(self, self.tr('information'), u"Modify Server")
     
     def removeServer(self):
         selectedCount = 0
@@ -164,7 +187,7 @@ class ServerManagerDialog(QtGui.QDialog, FORM_CLASS):
                 selectedCount = selectedCount + 1
                 
         if (selectedCount > 0):
-            rc = QMessageBox.question(self, u"Confirm", u"Are you sure want to delete selected server?", QMessageBox.Yes, QMessageBox.No)
+            rc = QMessageBox.question(self, self.tr('Confirm'), self.tr('Are you sure want to delete selected server?'), QMessageBox.Yes, QMessageBox.No)
             if (rc != QMessageBox.Yes):
                 return
                 

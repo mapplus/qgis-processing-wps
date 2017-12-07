@@ -1,4 +1,4 @@
-﻿# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 """
 ***************************************************************************
@@ -63,7 +63,7 @@ class WPSAlgorithmProvider(AlgorithmProvider):
         AlgorithmProvider.initializeSettings(self)
         ProcessingConfig.addSetting(Setting(self.getDescription(),
                                     WPSUtils.PROCESSING_MAX_FEATURES,
-                                    'Maximum Features for processing vector layer', 
+                                    self.tr("Maximum Features for processing vector layer"),
                                     WPSUtils.getProcessingMaxFeatures()))
 
     def unload(self):
@@ -71,20 +71,25 @@ class WPSAlgorithmProvider(AlgorithmProvider):
         ProcessingConfig.removeSetting(WPSUtils.PROCESSING_MAX_FEATURES)
 
     def getName(self):
-        return u'wps'
+        return self.tr("WPS")
 
     def getDescription(self):
-        return u'OGC WPS Services'
+        return self.tr("OGC WPS Services")
 
     def getIcon(self):
         return QIcon(os.path.dirname(__file__) + '/icons/wps.png')
+        
+    def tr(self, string, context=''):
+        if context == '':
+            context = 'WPS'
+        return QApplication.translate(context, string, None, QApplication.UnicodeUTF8)
 
     def _loadAlgorithms(self):
         # WPS GetCapabilities
         self.getCapabilities()
         
         self.actions = []
-        self.actions.append(WPSServerManagerAction(u'WPS Server Setting', self))
+        self.actions.append(WPSServerManagerAction("WPS Server Setting", self))
         
         for alg in self.alglist:
             alg.provider = self
